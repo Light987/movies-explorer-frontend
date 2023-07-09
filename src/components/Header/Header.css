@@ -1,0 +1,132 @@
+.header {
+    display: flex;
+    padding: 18px 70px;
+    background-color: #073042;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media screen and (max-width: 1090px) {
+    .header {
+        padding: 18px 30px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .header {
+        padding: 18px 14px;
+    }
+}
+
+.header__logo {
+    display: flex;
+    width: 38px;
+    height: 38px;
+    align-items: center;
+}
+
+.header__profile {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+}
+
+.header__profile-link {
+    display: flex;
+    height: 32px;
+    border-radius: 3px;
+    align-items: center;
+    justify-content: center;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 425px) {
+    .header__profile-link {
+        font-size: 10px;
+        height: 26px;
+    }
+}
+
+.header__profile-link_signin {
+    margin-right: 30px;
+    color: #fff;
+}
+
+@media screen and (max-width: 425px) {
+    .header__profile-link_signin {
+        margin-right: 14px;
+    }
+}
+
+.header__profile-link_signup {
+    width: 76px;
+    color: #000;
+    background-color: #3DDC84;
+}
+
+@media screen and (max-width: 425px) {
+    .header__profile-link_signup {
+        width: 54px;
+    }
+}
+
+
+.header__movies {
+    background-color: #202020;
+}
+
+.header__profile_movies {
+    display: grid;
+    grid-template-columns: 1fr repeat(2, auto) 1fr;
+    width: 100%;
+    grid-column-gap: 16px;
+    justify-items: center;
+}
+
+.header__profile-link_movies {
+    color: #FFF;
+    text-align: center;
+    font-size: 13px;
+    font-family: Inter, sans-serif;
+    font-weight: 500;
+    line-height: 18px;
+}
+
+.header__profile_list-item:nth-child(1) {
+    grid-column-start: 2;
+}
+
+.header__profile_list-item:nth-child(3) {
+    margin-left: auto;
+}
+
+.header__profile-link_movies-text {
+    margin: 0 13px 0 0;
+}
+
+.header__profile-link_movies-img {
+    width: 10.41px;
+    height: 10.68px;
+    padding: 9.75px 9.81px 9.58px;
+    border-radius: 6px;
+    background: #313131;
+    object-fit: contain;
+}
+
+.header__burger-menu {
+    margin: 0;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    background-color: #202020;
+    line-height: 1;
+    font-size: 0;
+}

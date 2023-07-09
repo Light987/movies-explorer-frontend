@@ -1,0 +1,46 @@
+.preloader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #202020;
+    padding: 50px 480px 80px;
+}
+
+@media screen and (max-width: 990px) {
+    .preloader {
+        padding: 50px 224px 80px;
+    }
+}
+
+@media screen and (max-width: 760px) {
+    .preloader {
+        padding: 50px 40px 80px;
+    }
+}
+
+.preloader__container {
+    min-width: 320px;
+    margin: 0;
+    padding: 11px 60px 9px;
+    border-radius: 6px;
+    background-color: #2F2F2F;
+    color: #FFF;
+    text-align: center;
+    font-size: 12px;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border: none;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 760px) {
+    .preloader__container {
+        min-width: 240px;
+    }
+}
+
+.preloader__hide {
+    display: none;
+}

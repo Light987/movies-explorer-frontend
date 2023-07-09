@@ -1,0 +1,112 @@
+.profile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #202020;
+}
+
+.profile__title {
+    color: #FFF;
+    text-align: center;
+    font-size: 24px;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin: 74px 0 0 0;
+    padding: 0 0 106px 0
+}
+
+@media screen and (max-width: 760px) {
+    .profile__title {
+        margin: 70px 0 0 0;
+        padding: 0 0 80px 0
+    }
+}
+
+.profile__form {
+    width: 410px;
+}
+
+@media screen and (max-width: 760px) {
+    .profile__form {
+        width: 260px;
+    }
+}
+
+.profile__container {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid #424242;
+    padding: 17px 0 16px 0;
+}
+
+.profile__container-text {
+    color: #FFF;
+    font-size: 11px;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 0;
+    margin: 0;
+}
+
+.profile__container-input {
+    color: #FFF;
+    border: none;
+    background-color: #202020;
+    text-align: right;
+    font-size: 11px;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    outline: none;
+}
+
+.profile__container-edit {
+    color: #FFF;
+    text-align: center;
+    font-size: 13px;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    background-color: #202020;
+    border: none;
+    margin: 220px 0 0;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 760px) {
+    .profile__container-edit {
+        margin: 379px 0 0;
+        font-size: 12px;
+    }
+}
+
+.profile__container-logout {
+    color: #EE3465;
+    text-align: center;
+    font-size: 13px;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    background-color: #202020;
+    border: none;
+    margin: 16px 0 0;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 760px) {
+    .profile__container-logout {
+        font-size: 12px;
+    }
+}
