@@ -2,11 +2,13 @@ import React from "react";
 
 function Techs() {
     return (
-        <>
+        <section className="techs-background">
             <div className="techs">
-                <h2 className="techs__title_main">Технологии</h2>
+                <h2 className="techs__title-main">Технологии</h2>
                 <p className="techs__title">7 технологий</p>
-                <p className="techs__subtitle">На курсе веб-разработки мы освоили технологии, которые применили в дипломном проекте.</p>
+                <p className="techs__subtitle">На курсе веб-разработки мы освоили технологии, которые применили в
+                    дипломном
+                    проекте.</p>
 
                 <ul className="techs__learn">
                     <li className="techs__learn-text">
@@ -38,7 +40,7 @@ function Techs() {
                     </li>
                 </ul>
             </div>
-        </>
+        </section>
     )
 }
 

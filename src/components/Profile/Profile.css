@@ -1,9 +1,10 @@
 .profile {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /*justify-content: center;*/
     align-items: center;
     background-color: #202020;
+    flex: 1;
 }
 
 .profile__title {
@@ -65,7 +66,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    outline: none;
 }
 
 .profile__container-edit {
@@ -78,7 +78,7 @@
     line-height: normal;
     background-color: #202020;
     border: none;
-    margin: 220px 0 0;
+    margin: 199px 0 0;
     cursor: pointer;
     text-decoration: none;
 }

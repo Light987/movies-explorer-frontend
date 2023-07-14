@@ -44,23 +44,6 @@ function App() {
         setSearchParams({movie: query})
     }
 
-    // const [arrayForHoldingMovies, setArrayForHoldingMovies] = useState([]);
-
-    // if (width >= 1280) {
-    //     setMoviesPerPages(12)
-    //     setNext(12)
-    //     setArrayForHoldingMovies(moviess.slice(0, 12))
-    // } else if (width >= 768 && width < 1280) {
-    //     setMoviesPerPages(8)
-    //     setNext(8)
-    //     setArrayForHoldingMovies(moviess.slice(0, 8))
-    // } else {
-    //     setMoviesPerPages(5)
-    //     setNext(5)
-    //     setArrayForHoldingMovies(moviess.slice(0, 12))
-    // }
-
-
     useEffect(() => {
         const token = localStorage.getItem("jwt");
         if (token) {
@@ -74,7 +57,7 @@ function App() {
                 .catch((err) => console.log(err))
         }
     }, []);
-    //
+
     useEffect(() => {
         if (loggedIn) {
             Promise.all([api.getUserInfo(), api.getAllCards()])
@@ -174,11 +157,9 @@ function App() {
         loopWithSlice(next, moviesPerPage);
     }
 
-
     return (<CurrentUserContext.Provider value={currentUser}>
         <div className="app">
 
-            <Header onBurgerMenu={setIsOpenBurgerMenu} width={width}/>
 
             <Routes>
                 <Route
@@ -186,21 +167,28 @@ function App() {
                     element={loggedIn ? (<Navigate to="/movies" replace/>) : (<Navigate to="/about" replace/>)}
                 />
 
-                <Route path="/about" element={<Main/>}/>
+                <Route path="/about" element={<Main onBurgerMenu={setIsOpenBurgerMenu} width={width}/>}/>
 
-                <Route path="/movies" element={<Movies movieLike={handleMovieLike}
+                <Route path="/movies" element={<Movies onBurgerMenu={setIsOpenBurgerMenu}
+                                                       width={width}
+                                                       movieLike={handleMovieLike}
                                                        maxMovies={moviess.length}
                                                        moviesToRender={moviesToShow}
                                                        showMoreMovies={handleShowMoreMovies}
                                                        handleSubmit={handleSubmit}
                                                        movieQuery={movieQuery}/>}/>
 
-                <Route path="/saved-movies" element={<SavedMovies movieLike={handleMovieLike}
+                <Route path="/saved-movies" element={<SavedMovies onBurgerMenu={setIsOpenBurgerMenu}
+                                                                  width={width}
+                                                                  movieLike={handleMovieLike}
                                                                   handleSubmit={handleSubmit}
                                                                   movieQuery={movieQuery}/>}/>
 
                 <Route path="/profile"
-                       element={<Profile onUpdateUser={handleUpdateUser} onSignout={handleSignOut}/>}/>
+                       element={<Profile onBurgerMenu={setIsOpenBurgerMenu}
+                                         width={width}
+                                         onUpdateUser={handleUpdateUser}
+                                         onSignout={handleSignOut}/>}/>
 
                 <Route path="/signin" element={<Login onLogin={handleLogin}/>}/>
 

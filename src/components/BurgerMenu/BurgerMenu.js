@@ -15,7 +15,7 @@ function BurgerMenu(props) {
                         type="button"
                         className="burgerMenu__close-button"
                         onClick={props.onClose}>
-                        <img className="burgerMenu__close-button_img" src={icon_close}
+                        <img className="burgerMenu__close-button-img" src={icon_close}
                              alt="Закрыть"></img>
                     </button>
                 </li>

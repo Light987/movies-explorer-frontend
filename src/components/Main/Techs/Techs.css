@@ -1,3 +1,12 @@
+.techs-background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    background-color: #272727;
+}
+
 .techs {
     display: flex;
     max-height: 625px;
@@ -5,6 +14,8 @@
     padding: 100px 70px;
     background-color: #272727;
     flex-flow: column wrap;
+    max-width: 1140px;
+    flex: 1;
 }
 
 @media screen and (max-width: 1090px) {
@@ -21,7 +32,7 @@
     }
 }
 
-.techs__title_main {
+.techs__title-main {
     flex-grow: 1;
     margin: 0;
     padding: 0 0 23px;
@@ -36,7 +47,7 @@
 }
 
 @media screen and (max-width: 410px) {
-    .techs__title_main {
+    .techs__title-main {
         padding: 0 0 28px;
         font-size: 18px;
         line-height: 22px;
@@ -119,7 +130,7 @@
 
 @media screen and (max-width: 410px) {
     .techs__learn {
-        flex-direction: column;
+        flex-direction: row;
         flex-wrap: wrap;
         margin: 50px 0 0;
         justify-content: start;

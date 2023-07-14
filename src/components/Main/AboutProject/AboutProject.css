@@ -1,26 +1,37 @@
-.aboutproject {
+.about-project-background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    background-color: #202020;
+}
+
+.about-project {
     display: flex;
     max-height: 608px;
     margin: 0;
     padding: 110px 70px;
     background-color: #202020;
     flex-flow: column wrap;
+    max-width: 1140px;
+    flex: 1;
 }
 
 @media screen and (max-width: 1090px) {
-    .aboutproject {
-        padding: 90px 50px;
+    .about-project {
+        padding: 97px 50px 92px;
     }
 }
 
 @media screen and (max-width: 610px) {
-    .aboutproject {
+    .about-project {
         max-height: 641px;
         padding: 70px 18px;
     }
 }
 
-.aboutproject__title {
+.about-project__title {
     flex-grow: 1;
     margin: 0;
     padding: 0 0 23px;
@@ -35,50 +46,53 @@
 }
 
 @media screen and (max-width: 610px) {
-    .aboutproject__title {
+    .about-project__title {
         font-size: 18px;
         line-height: 22px;
         padding: 0 0 28px;
     }
 }
 
-.aboutproject__info {
-    display: flex;
-    width: 100%;
+.about-project__info {
+    display: grid;
+    grid-auto-flow: column;
     max-height: 90px;
-    margin: 70px 0 0;
+    margin: 50px 0 20px;
     padding: 0;
     flex-flow: column wrap;
     list-style: none;
+    column-gap: 40px;
 }
 
 @media screen and (max-width: 830px) {
-    .aboutproject__info {
+    .about-project__info {
         max-height: 124px;
+        column-gap: 30px;
     }
 }
 
 @media screen and (max-width: 610px) {
-    .aboutproject__info {
+    .about-project__info {
         display: flex;
-        margin: 60px 0 0;
+        margin: 5px 0 0;
         flex-flow: column nowrap;
         max-height: 272px;
     }
 }
 
-.aboutproject__info-text {
-    max-width: 50%;
+.about-project__info-content {
+    max-width: 550px;
     color: #fff;
+    word-wrap: break-word;
 }
 
 @media screen and (max-width: 610px) {
-    .aboutproject__info-text {
+    .about-project__info-content {
         max-width: 100%;
     }
 }
 
-.aboutproject__info-text:nth-child(odd) {
+.about-project__text-title {
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 400;
@@ -88,21 +102,26 @@
 }
 
 @media screen and (max-width: 768px) {
-    .aboutproject__info-text:nth-child(odd) {
-        font-size: 18px;
-        line-height: 22px;
+    .about-project__text-title {
+        color: #FFF;
+        font-family: Inter, sans-serif;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: -0.8px;
     }
 }
 
 @media screen and (max-width: 610px) {
-    .aboutproject__info-text:nth-child(3) {
+    .about-project__text-title {
         margin: 56px 0 0;
         font-size: 18px;
         line-height: 22px;
     }
 }
 
-.aboutproject__info-text:nth-child(even) {
+.about-project__text-about {
     margin: 26px auto 0 0;
     font-family: 'Inter', sans-serif;
     font-style: normal;
@@ -112,7 +131,7 @@
 }
 
 @media screen and (max-width: 1090px) {
-    .aboutproject__info-text:nth-child(even) {
+    .about-project__text-about {
         margin: 22px auto 0 0;
         font-size: 12px;
         line-height: 18px;
@@ -120,7 +139,7 @@
 }
 
 @media screen and (max-width: 610px) {
-    .aboutproject__info-text:nth-child(even) {
+    .about-project__text-about {
         margin: 16px 0 0;
         font-size: 11px;
         line-height: 16px;
@@ -128,7 +147,7 @@
 }
 
 
-.aboutproject__progress {
+.about-project__progress {
     display: flex;
     max-width: 100%;
     max-height: 67px;
@@ -139,26 +158,32 @@
     list-style: none;
 }
 
+@media screen and (max-width: 1090px) {
+    .about-project__progress {
+        margin: 91px 0 0;
+    }
+}
+
 @media screen and (max-width: 610px) {
-    .aboutproject__progress {
-        margin: 60px 0 0;
+    .about-project__progress {
+        margin: 114px 0 0;
     }
 }
 
 @media screen and (max-width: 1090px) {
-    .aboutproject__progress:nth-child(even) {
+    .about-project__progress:nth-child(even) {
         margin: 93px 0 0;
     }
 }
 
 @media screen and (max-width: 610px) {
-    .aboutproject__progress:nth-child(even) {
+    .about-project__progress:nth-child(even) {
         max-height: 35px;
         margin: 16px 0 0;
     }
 }
 
-.aboutproject__progress-text {
+.about-project__progress-text {
     color: #fff;
     font-family: 'Inter', sans-serif;
     font-style: normal;
@@ -168,42 +193,42 @@
     text-align: center;
 }
 
-.aboutproject__progress-text:nth-child(1) {
+.about-project__progress-text:nth-child(1) {
     min-width: 20%;
     background-color: #3DDC84;
     color: #000;
 }
 
 @media screen and (max-width: 1090px) {
-    .aboutproject__progress-text:nth-child(1) {
+    .about-project__progress-text:nth-child(1) {
         min-width: 21%;
     }
 }
 
 @media screen and (max-width: 610px) {
-    .aboutproject__progress-text:nth-child(1) {
-        min-width: 35%;
+    .about-project__progress-text:nth-child(1) {
+        min-width: 36%;
     }
 }
 
-.aboutproject__progress-text:nth-child(3) {
+.about-project__progress-text:nth-child(3) {
     min-width: 80%;
     background-color: #303030;
 }
 
 @media screen and (max-width: 1090px) {
-    .aboutproject__progress-text:nth-child(3) {
+    .about-project__progress-text:nth-child(3) {
         min-width: 79%;
     }
 }
 
 @media screen and (max-width: 610px) {
-    .aboutproject__progress-text:nth-child(3) {
+    .about-project__progress-text:nth-child(3) {
         min-width: 65%;
     }
 }
 
-.aboutproject__progress-text:nth-child(odd) {
+.about-project__progress-text:nth-child(odd) {
     display: flex;
     height: 36px;
     align-items: center;
@@ -211,13 +236,13 @@
 }
 
 @media screen and (max-width: 610px) {
-    .aboutproject__progress-text:nth-child(odd) {
+    .about-project__progress-text:nth-child(odd) {
         font-size: 11px;
         line-height: 13px;
     }
 }
 
-.aboutproject__progress-text:nth-child(even) {
+.about-project__progress-text:nth-child(even) {
     margin: 14px 0 0;
     color: #8B8B8B;
     font-family: 'Inter', sans-serif;
@@ -228,7 +253,7 @@
 }
 
 @media screen and (max-width: 610px) {
-    .aboutproject__progress-text:nth-child(even) {
+    .about-project__progress-text:nth-child(even) {
         margin: 10px 0 0;
         font-weight: 400;
         font-size: 11px;

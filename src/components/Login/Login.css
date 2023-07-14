@@ -25,14 +25,14 @@
     }
 }
 
-.login__block_logo {
+.login__block-logo {
     width: 38px;
     height: 38px;
     padding: 0;
     margin: 0;
 }
 
-.login__block_title {
+.login__block-title {
     margin: 40px 0 16px;
     padding: 0;
     color: #FFF;
@@ -42,12 +42,12 @@
 }
 
 @media screen and (max-width: 500px) {
-    .login__block_title {
+    .login__block-title {
         margin: 50px 0 56px;
     }
 }
 
-.login__block_email {
+.login__block-email {
     margin: 24px 0 0;
     padding: 0;
     color: #8B8B8B;
@@ -56,12 +56,12 @@
 }
 
 @media screen and (max-width: 500px) {
-    .login__block_email {
+    .login__block-email {
         margin-right: auto;
     }
 }
 
-.login__block_input {
+.login__block-input {
     margin: 5px 0 0;
     width: 396px;
     height: 27px;
@@ -73,19 +73,18 @@
     font-size: 14px;
     font-family: Inter, sans-serif;
     font-weight: 500;
-    outline: none;
 }
 
 @media screen and (max-width: 500px) {
-    .login__block_input {
+    .login__block-input {
         width: 260px;
     }
 }
 
-.login__block_button {
-    width: 369px;
+.login__block-button {
+    width: 396px;
     height: 45px;
-    margin: 221px 0 0;
+    margin: 219px 0 0;
     padding: 0;
     color: #FFF;
     background-color: #4285F4;
@@ -98,29 +97,31 @@
 }
 
 @media screen and (max-width: 500px) {
-    .login__block_button {
+    .login__block-button {
         width: 260px;
+        margin-top: 310px;
     }
 }
 
 
-.login__block_registration {
+.login__registration-block {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 6px;
     width: 369px;
+    margin: 2px auto 0;
 }
 
 @media screen and (max-width: 500px) {
-    .login__block_registration {
+    .login__registration-block {
         gap: 7px;
         width: 260px;
     }
 }
 
-.login__block_registration-q {
+.login__block-registration-q {
     color: #8B8B8B;
     text-align: center;
     font-size: 14px;
@@ -128,12 +129,12 @@
 }
 
 @media screen and (max-width: 500px) {
-    .login__block_registration-q {
+    .login__block-registration-q {
         font-size: 12px;
     }
 }
 
-.login__block_registration-link {
+.login__block-registration_link {
     padding: 0;
     color: #4285F4;
     text-align: center;
@@ -144,7 +145,7 @@
 }
 
 @media screen and (max-width: 500px) {
-    .login__block_registration-link {
+    .login__block-registration_link {
         font-size: 12px;
     }
 }

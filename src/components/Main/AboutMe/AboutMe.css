@@ -1,4 +1,13 @@
-.aboutme {
+.about-me-background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    background-color: #202020;
+}
+
+.about-me {
     display: flex;
     max-height: 654px;
     margin: 0;
@@ -6,21 +15,24 @@
     background-color: #202020;
     flex-flow: column nowrap;
     color: #fff;
+    max-width: 1140px;
+    flex: 1;
 }
 
 @media screen and (max-width: 1090px) {
-    .aboutme {
+    .about-me {
         padding: 90px 50px;
     }
 }
 
 @media screen and (max-width: 760px) {
-    .aboutme {
+    .about-me {
+    max-height: 904px;
         padding: 70px 14px;
     }
 }
 
-.aboutme__title {
+.about-me__title {
     flex-grow: 1;
     margin: 0;
     padding: 0 0 23px;
@@ -35,7 +47,7 @@
 }
 
 @media screen and (max-width: 760px) {
-    .aboutme__title {
+    .about-me__title {
         order: -999;
         font-size: 18px;
         line-height: 22px;
@@ -43,7 +55,7 @@
     }
 }
 
-.aboutme__content {
+.about-me__content {
     display: flex;
     max-height: 494px;
     margin: 66px 0 0;
@@ -51,19 +63,20 @@
 }
 
 @media screen and (max-width: 1090px) {
-    .aboutme__content {
+    .about-me__content {
         max-height: 306px;
     }
 }
 
 @media screen and (max-width: 760px) {
-    .aboutme__content {
+    .about-me__content {
         max-height: 653px;
         flex-flow: column nowrap;
+        margin: 61px 0 0;
     }
 }
 
-.aboutme__name {
+.about-me__name {
     margin: 0;
     padding: 0;
     font-family: 'Inter', sans-serif;
@@ -75,14 +88,14 @@
 }
 
 @media screen and (max-width: 1090px) {
-    .aboutme__name {
+    .about-me__name {
         font-size: 40px;
         line-height: 40px;
     }
 }
 
 @media screen and (max-width: 760px) {
-    .aboutme__name {
+    .about-me__name {
         order: 3;
         margin: 40px 0 0;
         font-size: 30px;
@@ -90,7 +103,7 @@
     }
 }
 
-.aboutme__about {
+.about-me__about {
     margin: 18px 0 0;
     padding: 0;
     font-family: 'Inter', sans-serif;
@@ -101,7 +114,7 @@
 }
 
 @media screen and (max-width: 1090px) {
-    .aboutme__about {
+    .about-me__about {
         margin: 16px 0 0;
         font-size: 12px;
         line-height: 18px;
@@ -109,7 +122,7 @@
 }
 
 @media screen and (max-width: 760px) {
-    .aboutme__about {
+    .about-me__about {
         order: 4;
         margin: 20px 0 0;
         font-size: 11px;
@@ -117,7 +130,7 @@
     }
 }
 
-.aboutme__text {
+.about-me__text {
     max-width: 53%;
     margin: 26px 0 0;
     padding: 0;
@@ -129,7 +142,7 @@
 }
 
 @media screen and (max-width: 1090px) {
-    .aboutme__text {
+    .about-me__text {
         max-width: 55%;
         margin: 20px 0 0;
         font-size: 12px;
@@ -138,7 +151,7 @@
 }
 
 @media screen and (max-width: 760px) {
-    .aboutme__text {
+    .about-me__text {
         max-width: 100%;
         order: 5;
         font-size: 11px;
@@ -146,7 +159,7 @@
     }
 }
 
-.aboutme__link {
+.about-me__link {
     margin: 100px 0 0;
     padding: 0;
     text-decoration: none;
@@ -160,19 +173,19 @@
 }
 
 @media screen and (max-width: 1090px) {
-    .aboutme__link {
+    .about-me__link {
         margin: 105px 0 0;
     }
 }
 
 @media screen and (max-width: 760px) {
-    .aboutme__link {
+    .about-me__link {
         order: 6;
         margin: 40px 0 0;
     }
 }
 
-.aboutme__img {
+.about-me__img {
     width: 270px;
     height: 327px;
     margin-left: auto;
@@ -182,14 +195,14 @@
 }
 
 @media screen and (max-width: 1090px) {
-    .aboutme__img {
+    .about-me__img {
         width: 255px;
         height: 307px;
     }
 }
 
 @media screen and (max-width: 760px) {
-    .aboutme__img {
+    .about-me__img {
         order: 1;
         width: 292px;
         height: 352px;

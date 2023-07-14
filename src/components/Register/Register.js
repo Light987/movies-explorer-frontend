@@ -27,12 +27,12 @@ function Register(props) {
         <div className="register">
             <div className="register__block">
                 <Link to="/">
-                    <img className="register__block_logo" src={logo} alt="Обозреватель фильмов"></img>
+                    <img className="register__block-logo" src={logo} alt="Обозреватель фильмов"></img>
                 </Link>
-                <h1 className="register__block_title">Добро пожаловать!</h1>
+                <h1 className="register__block-title">Добро пожаловать!</h1>
                 <form onSubmit={handleSubmit}>
-                    <p className="register__block_text">Имя</p>
-                    <input className="register__block_input"
+                    <p className="register__block-text">Имя</p>
+                    <input className="register__block-input"
                            name="name"
                            type="name"
                            autoComplete="off"
@@ -40,30 +40,33 @@ function Register(props) {
                            value={regFormValue.name || ""}
                            onChange={handleChange}
                            minLength="2"
-                           maxLength="30"></input>
-                    <p className="register__block_text">E-mail</p>
-                    <input className="register__block_input"
+                           maxLength="30"
+                           placeholder='Введите имя'></input>
+                    <p className="register__block-text">E-mail</p>
+                    <input className="register__block-input"
                            name="email"
                            type="email"
                            autoComplete="off"
                            required
                            value={regFormValue.email || ""}
-                           onChange={handleChange}/>
-                    <p className="register__block_text">Пароль</p>
-                    <input className="register__block_input"
+                           onChange={handleChange}
+                           placeholder='Введите email'/>
+                    <p className="register__block-text">Пароль</p>
+                    <input className={`register__block-input ${props.isSuccess ? "register__block-input_error" : ""}`}
                            name="password"
                            type="password"
                            autoComplete="off"
                            required
                            value={regFormValue.password || ""}
-                           onChange={handleChange}/>
+                           onChange={handleChange}
+                           placeholder='Введите пароль'/>
                     <span
-                        className={`register__block_error ${props.isSuccess ? "register__block_error-open" : ""}`}>{props.isError}</span>
-                    <button className="register__block_button" type="submit">Зарегистрироваться</button>
+                        className={`register__block-error ${props.isSuccess ? "register__block-error_open" : ""}`}>{props.isError}</span>
+                    <button className="register__block-button" type="submit">Зарегистрироваться</button>
                 </form>
-                <div className="register__block_registration">
-                    <p className="register__block_registration-q">Ещё не зарегистрированы?</p>
-                    <Link to="/signin" className="register__block_registration-link">
+                <div className="register__registration-block">
+                    <p className="register__block-registration-q">Уже зарегистрированы?</p>
+                    <Link to="/signin" className="register__block-registration register__block-registration_link">
                         Войти
                     </Link>
                 </div>
