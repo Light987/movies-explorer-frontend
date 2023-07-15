@@ -117,8 +117,17 @@
     cursor: pointer;
 }
 
+.footer__copyright-link:hover {
+    animation: scaling 1000ms infinite ease;
+}
+
 .footer__copyright-link_praktikum {
     margin-right: 20px;
+}
+
+
+.footer__copyright-link_praktikum:hover {
+    animation: scaling 1000ms infinite ease;
 }
 
 @media screen and (max-width: 760px) {

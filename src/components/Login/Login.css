@@ -1,8 +1,5 @@
 .login {
     display: flex; /*none*/
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100vw;
     height: 100vh;
     justify-content: center;
@@ -30,6 +27,10 @@
     height: 38px;
     padding: 0;
     margin: 0;
+}
+
+.login__block-logo:hover {
+    animation: scaling 1000ms infinite ease;
 }
 
 .login__block-title {
@@ -96,6 +97,10 @@
     cursor: pointer;
 }
 
+.login__block-button:hover {
+    animation: scaling 1000ms infinite ease;
+}
+
 @media screen and (max-width: 500px) {
     .login__block-button {
         width: 260px;
@@ -142,6 +147,10 @@
     font-family: Inter, sans-serif;
     text-decoration: none;
     cursor: pointer;
+}
+
+.login__block-registration_link:hover {
+    animation: scaling 1000ms infinite ease;
 }
 
 @media screen and (max-width: 500px) {

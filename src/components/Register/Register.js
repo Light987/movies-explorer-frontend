@@ -24,7 +24,7 @@ function Register(props) {
     };
 
     return (
-        <div className="register">
+        <section className="register">
             <div className="register__block">
                 <Link to="/">
                     <img className="register__block-logo" src={logo} alt="Обозреватель фильмов"></img>
@@ -71,7 +71,7 @@ function Register(props) {
                     </Link>
                 </div>
             </div>
-        </div>);
+        </section>);
 }
 
 export default Register;

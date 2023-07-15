@@ -35,6 +35,10 @@
     cursor: pointer;
 }
 
+.preloader__container:hover {
+    animation: scaling 1000ms infinite ease;
+}
+
 @media screen and (max-width: 760px) {
     .preloader__container {
         min-width: 240px;

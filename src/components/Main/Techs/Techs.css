@@ -9,7 +9,6 @@
 
 .techs {
     display: flex;
-    max-height: 625px;
     margin: 0;
     padding: 100px 70px;
     background-color: #272727;
@@ -33,7 +32,6 @@
 }
 
 .techs__title-main {
-    flex-grow: 1;
     margin: 0;
     padding: 0 0 23px;
     color: #fff;

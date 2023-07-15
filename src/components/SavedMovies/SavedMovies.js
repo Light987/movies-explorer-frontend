@@ -10,7 +10,6 @@ function SavedMovies(props) {
 
     return (
         <main className="main">
-            <Header onBurgerMenu={props.onBurgerMenu} width={props.width}/>
             <SearchForm handleSubmit={props.handleSubmit}/>
             <MoviesCardList movies={savedMovies(movies)} onMovieLike={props.movieLike}
                             movieQuery={props.movieQuery}/>

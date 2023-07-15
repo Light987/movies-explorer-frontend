@@ -27,6 +27,7 @@ function App() {
     const [movies, setMovies] = useState([]);
     const width = useResize();
     const [isOpenBurgerMenu, setIsOpenBurgerMenu] = useState(false);
+    const [isEditProfile, setIsEditProfile] = useState(false);
     const [isErrorMessage, setIsErrorMessage] = useState("");
     const [isErrorStatus, setIsErrorStatus] = useState(false);
     const [moviesToShow, setMoviesToShow] = useState([]);
@@ -157,21 +158,24 @@ function App() {
         loopWithSlice(next, moviesPerPage);
     }
 
+    function handleEditProfile() {
+        setIsEditProfile(false);
+    }
+
     return (<CurrentUserContext.Provider value={currentUser}>
         <div className="app">
 
 
+            <Header onBurgerMenu={setIsOpenBurgerMenu} width={width}/>
             <Routes>
                 <Route
                     path="/"
                     element={loggedIn ? (<Navigate to="/movies" replace/>) : (<Navigate to="/about" replace/>)}
                 />
 
-                <Route path="/about" element={<Main onBurgerMenu={setIsOpenBurgerMenu} width={width}/>}/>
+                <Route path="/about" element={<Main/>}/>
 
-                <Route path="/movies" element={<Movies onBurgerMenu={setIsOpenBurgerMenu}
-                                                       width={width}
-                                                       movieLike={handleMovieLike}
+                <Route path="/movies" element={<Movies movieLike={handleMovieLike}
                                                        maxMovies={moviess.length}
                                                        moviesToRender={moviesToShow}
                                                        showMoreMovies={handleShowMoreMovies}
@@ -185,8 +189,9 @@ function App() {
                                                                   movieQuery={movieQuery}/>}/>
 
                 <Route path="/profile"
-                       element={<Profile onBurgerMenu={setIsOpenBurgerMenu}
-                                         width={width}
+                       element={<Profile isEditProfile={isEditProfile}
+                                         onEditProfile={setIsEditProfile}
+                                         handleEditProfile={handleEditProfile}
                                          onUpdateUser={handleUpdateUser}
                                          onSignout={handleSignOut}/>}/>
 
@@ -196,7 +201,8 @@ function App() {
                        element={<Register isSuccess={isErrorStatus} isError={isErrorMessage}
                                           onRegister={handleRegister}/>}/>
 
-                <Route path="*" element={<NotFound/>}/>
+                <Route path="/404" element={<NotFound/>}/>
+                <Route path="*" element={<Navigate to="/404"/>}/>
             </Routes>
 
             <BurgerMenu isOpened={isOpenBurgerMenu} onClose={closeBurgerMenu}/>

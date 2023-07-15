@@ -1,10 +1,7 @@
 .notfound {
     display: flex; /*none*/
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     justify-content: center;
     background-color: #202020;
     opacity: 1; /*0*/
@@ -14,12 +11,18 @@
     display: flex;
     position: relative;
     flex-direction: column;
-    margin-top: 403px;
+    margin-top: 250px;
+}
+
+@media screen and (max-width: 768px) {
+    .notfound__block {
+        margin-top: 411px;
+    }
 }
 
 @media screen and (max-width: 400px) {
     .notfound__block {
-        margin-top: 329px;
+        margin-top: 332px;
     }
 }
 
@@ -39,7 +42,7 @@
 }
 
 .notfound__block_error-text {
-    margin: 5px 0 0;
+    margin: 10px 0 0;
     padding: 0;
     color: #FFF;
     text-align: center;
@@ -49,7 +52,7 @@
 
 @media screen and (max-width: 400px) {
     .notfound__block_error-text {
-        margin: 10px 0 0;
+        margin: 13px 0 0;
         font-size: 12px;
     }
 }
@@ -62,6 +65,10 @@
     font-family: Inter, sans-serif;
     text-decoration: none;
     cursor: pointer;
+}
+
+.notfound__block_back:hover {
+    animation: scaling 1000ms infinite ease;
 }
 
 @media screen and (max-width: 400px) {

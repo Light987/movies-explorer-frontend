@@ -143,6 +143,10 @@
     margin-right: 1px;
 }
 
+.portfolio__link-sites:hover {
+    animation: scaling 1000ms infinite ease;
+}
+
 @media screen and (max-width: 1090px) {
     .portfolio__link-sites {
         font-size: 28px;

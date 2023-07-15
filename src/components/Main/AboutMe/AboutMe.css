@@ -172,6 +172,10 @@
     line-height: 17px;
 }
 
+.about-me__link:hover {
+    animation: scaling 1000ms infinite ease;
+}
+
 @media screen and (max-width: 1090px) {
     .about-me__link {
         margin: 105px 0 0;

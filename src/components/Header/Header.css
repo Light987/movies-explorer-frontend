@@ -11,7 +11,17 @@
     display: flex;
     width: 38px;
     height: 38px;
+    justify-content: center;
     align-items: center;
+}
+
+.header__logo:hover {
+    animation: scaling 1000ms infinite ease;
+}
+
+.header__nav {
+    max-width: 1280px;
+    flex: 1;
 }
 
 .header__profile {
@@ -20,7 +30,6 @@
     margin: 0;
     align-items: center;
     list-style: none;
-    max-width: 1140px;
     flex: 1;
     background-color: #073042;
 }
@@ -63,6 +72,11 @@
     color: #fff;
 }
 
+.header__profile-link_signin:hover {
+    animation: scaling 1300ms infinite;
+}
+
+
 @media screen and (max-width: 425px) {
     .header__profile-link_signin {
         margin-right: 14px;
@@ -73,6 +87,10 @@
     width: 76px;
     color: #000;
     background-color: #3DDC84;
+}
+
+.header__profile-link_signup:hover {
+    animation: scaling 1300ms infinite;
 }
 
 @media screen and (max-width: 425px) {
@@ -88,16 +106,12 @@
 
 @media screen and (max-width: 425px) {
     .header_movies {
-        margin: 18px 14px;
+        padding: 16px 14px;
     }
 }
 
 .header__profile_movies {
-    display: grid;
-    grid-template-columns: 1fr repeat(2, auto) 1fr;
-    width: 100%;
     grid-column-gap: 16px;
-    justify-items: center;
     background-color: #202020;
 }
 
@@ -108,6 +122,10 @@
     font-family: Inter, sans-serif;
     font-weight: 500;
     line-height: 18px;
+}
+
+.header__profile-link_movies:hover {
+    animation: scaling 1000ms infinite ease;
 }
 
 .header__profile-link_on-page {
@@ -157,7 +175,6 @@
     align-items: center;
     padding: 0;
     margin: 18px 30px;
-    width: 100%;
 }
 
 @media screen and (max-width: 425px) {
@@ -187,5 +204,10 @@
     .header__burger-menu {
         width: 40px;
         height: 43px;
+    }
+
+    .header__burger-menu_img {
+        width: 35px;
+        height: 35px;
     }
 }
