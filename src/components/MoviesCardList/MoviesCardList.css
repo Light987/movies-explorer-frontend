@@ -35,7 +35,7 @@
 @media screen and (max-width: 760px) {
     .movies-card-list {
         padding: 40px 10px 30px;
-        gap: 14px;
+        gap: 16px;
         justify-content: center;
     }
 }

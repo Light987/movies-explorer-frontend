@@ -140,8 +140,9 @@
 
 .techs__learn-text {
     display: flex;
+    word-wrap: anywhere;
     width: 90px;
-    height: 60px;
+    padding: 21.5px 0;
     color: #fff;
     font-family: 'Inter', sans-serif;
     font-style: normal;

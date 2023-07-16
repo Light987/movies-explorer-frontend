@@ -58,6 +58,7 @@
 @media screen and (max-width: 760px) {
     .footer__up {
         margin: 76px 0 20px;
+        font-size: 12px;
     }
 }
 

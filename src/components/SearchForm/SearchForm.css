@@ -18,13 +18,13 @@
 
 @media screen and (max-width: 990px) {
     .search-form {
-        padding: 77px 30px 60px;
+        padding: 80px 30px 60px;
     }
 }
 
 @media screen and (max-width: 760px) {
     .search-form {
-        padding: 81px 14px 50px;
+        padding: 83px 14px 50px;
     }
 }
 
@@ -50,6 +50,7 @@
     font-weight: 500;
     background-color: #202020;
     border: none;
+    padding: 0;
 }
 
 @media screen and (max-width: 760px) {
@@ -87,7 +88,7 @@
     justify-content: flex-start;
     align-items: center;
     padding: 0;
-    margin: 33px 0 0;
+    margin: 32px 0 0;
 }
 
 @media screen and (max-width: 990px) {
@@ -101,20 +102,22 @@
     .search-form__filter {
         flex-direction: row-reverse;
         justify-content: center;
-        margin: 40px 0 0;
+        margin: 41px 0 0;
     }
 }
 
 .search-form__filter-checkbox {
-    margin: 0 17px 0 18px;
+    position: relative;
     width: 16px;
     height: 16px;
-    background-color: white;
+    background-color: #3DDC84;
     border-radius: 50%;
+    left: -34px;
     vertical-align: middle;
     appearance: none;
     outline: none;
     cursor: pointer;
+    z-index: 2;
 }
 
 .search-form__filter-checkbox:hover {
@@ -122,13 +125,26 @@
 }
 
 .search-form__filter-checkbox:checked {
-    background-color: #3DDC84;
+    left: -18px;
+}
+
+.search-form__filter-inner {
+    margin: 0;
+    width: 36px;
+    height: 20px;
+    background-color: #202020;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px 0 rgba(50, 50, 71, 0.06), 0 4px 4px 0 rgba(50, 50, 71, 0.08);
+    z-index: 1;
 }
 
 @media screen and (max-width: 990px) {
     .search-form__filter-checkbox {
-        flex-direction: row-reverse;
-        margin: 0 0 0 32px;
+        left: 34px;
+    }
+
+    .search-form__filter-checkbox:checked {
+        left: 18px;
     }
 }
 
@@ -136,7 +152,6 @@
     .search-form__filter-checkbox {
         flex-direction: row-reverse;
         justify-content: center;
-        margin: 0 0 0 29px;
     }
 }
 
@@ -149,10 +164,21 @@
     line-height: 18px;
     padding: 0;
     margin: 0;
+    position: relative;
+    left: -2px;
+}
+
+@media screen and (max-width: 990px) {
+    .search-form__filter-text {
+        position: relative;
+        left: 0.3px;
+    }
 }
 
 @media screen and (max-width: 760px) {
     .search-form__filter-text {
         font-size: 11px;
+        position: relative;
+        left: 1px;
     }
 }

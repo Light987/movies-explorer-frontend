@@ -154,6 +154,10 @@
     margin-right: auto;
 }
 
+.header__profile-list-item:nth-child(2) {
+    margin: 0 0 0 64px;
+}
+
 .header__profile-list-item:nth-child(4) {
     margin-left: auto;
 }
@@ -177,6 +181,12 @@
     margin: 18px 30px;
 }
 
+@media screen and (max-width: 990px) {
+    .header__burger {
+        margin: 15px 30px;
+    }
+}
+
 @media screen and (max-width: 425px) {
     .header__burger {
         margin: 0;
@@ -193,6 +203,8 @@
     line-height: 1;
     font-size: 0;
 }
+
+
 
 @media screen and (max-width: 990px) {
     .header__logo {

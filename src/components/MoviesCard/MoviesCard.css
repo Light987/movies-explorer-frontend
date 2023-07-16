@@ -69,8 +69,14 @@
 
 .movies-card__img {
     width: 100%;
-    margin: 18px 0;
+    margin: 18px 0 17px;
     background-size: cover;
+}
+
+@media screen and (max-width: 760px) {
+    .movies-card__img {
+    margin: 14px 0;
+    }
 }
 
 .movies-card__button {

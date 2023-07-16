@@ -183,6 +183,7 @@ function App() {
                                                        movieQuery={movieQuery}/>}/>
 
                 <Route path="/saved-movies" element={<SavedMovies onBurgerMenu={setIsOpenBurgerMenu}
+                                                                  moviesToRender={moviesToShow}
                                                                   width={width}
                                                                   movieLike={handleMovieLike}
                                                                   handleSubmit={handleSubmit}

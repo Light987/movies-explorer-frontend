@@ -1,18 +1,28 @@
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import movies from "../../utils/movies";
 import SearchForm from "../SearchForm/SearchForm";
-import Header from "../Header/Header";
+import Preloader from "../Preloader/Preloader";
 
 function SavedMovies(props) {
     function savedMovies(movies) {
-        return movies.filter((savedMovie) => savedMovie.isLiked)
+        if (movies) {
+            return movies.filter((savedMovie) => savedMovie.isLiked);
+        } else {
+            return [];
+        }
     }
+
+    console.log(savedMovies(movies) ? savedMovies(movies).length : 0)
+    console.log(savedMovies(props.moviesToRender) ? savedMovies(props.moviesToRender).length : 0)
 
     return (
         <main className="main">
             <SearchForm handleSubmit={props.handleSubmit}/>
-            <MoviesCardList movies={savedMovies(movies)} onMovieLike={props.movieLike}
+            <MoviesCardList movies={savedMovies(props.moviesToRender)} onMovieLike={props.movieLike}
                             movieQuery={props.movieQuery}/>
+            <Preloader maxMovies={savedMovies(movies) ? savedMovies(movies).length : 0}
+                       moviesLen={savedMovies(props.moviesToRender) ? savedMovies(props.moviesToRender).length : 0}
+                       morePosts={savedMovies(props.showMoreMovies)}/>
         </main>
     )
 }

@@ -17,8 +17,8 @@ function SearchForm(props) {
                         </button>
                     </div>
                     <label className="search-form__filter">
-                        <input type="checkbox" className="search-form__filter-checkbox">
-                        </input>
+                        <div className="search-form__filter-inner"></div>
+                        <input type="checkbox" className="search-form__filter-checkbox"></input>
                         <span className="search-form__filter-text">Короткометражки</span>
                     </label>
                 </form>

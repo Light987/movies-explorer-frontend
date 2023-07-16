@@ -77,7 +77,6 @@
 
 .promo-subtitle {
     max-width: 310px;
-    max-height: 32px;
     margin: 36px 0 0;
     padding: 0;
     font-family: 'Inter', sans-serif;
@@ -108,7 +107,7 @@
     display: flex;
     max-width: 89px;
     max-height: 36px;
-    margin: 145px 0 0;
+    margin: 145px 0 148px;
     padding: 10px 19px;
     color: #fff;
     border: 1px solid rgba(255, 255, 255, 0.6);
