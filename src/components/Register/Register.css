@@ -1,0 +1,180 @@
+.register {
+    display: flex; /*none*/
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    visibility: visible; /*hidden*/
+    background-color: #202020;
+    opacity: 1; /*0*/
+}
+
+.register__block {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+}
+
+@media screen and (max-width: 500px) {
+    .register__block {
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.register__block-logo {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    margin: 0;
+}
+
+.register__block-logo:hover {
+    animation: scaling 1000ms infinite ease;
+}
+
+.register__block-title {
+    margin: 36px 0 16px;
+    padding: 0;
+    color: #FFF;
+    font-family: Inter, sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+@media screen and (max-width: 500px) {
+    .register__block-title {
+        margin: 50px 0 56px;
+    }
+}
+
+
+.register__block-text {
+    margin: 26px 0 0;
+    padding: 0;
+    color: #8B8B8B;
+    font-size: 10px;
+    font-family: Inter, sans-serif;
+}
+
+@media screen and (max-width: 500px) {
+    .register__block_email {
+        margin-right: auto;
+    }
+}
+
+.register__block-input {
+    width: 396px;
+    height: 30px;
+    padding: 0;
+    color: #FFF;
+    background-color: #202020;
+    border: none;
+    border-bottom: 1px solid #424242;
+    font-size: 14px;
+    font-family: Inter, sans-serif;
+    font-weight: 500;
+}
+
+@media screen and (max-width: 500px) {
+    .register__block-input {
+        width: 260px;
+    }
+}
+
+.register__block-input_error {
+    color: #EE3465;
+}
+
+.register__block-error {
+    color: #EE3465;
+    font-size: 10px;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 6px 0 12px 0;
+}
+
+.register__block-error_open {
+    margin: 6px 0 0 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.register__block-button {
+    width: 395px;
+    height: 45px;
+    margin: 135px 0 0;
+    padding: 0;
+    color: #FFF;
+    background-color: #4285F4;
+    border: none;
+    text-align: center;
+    font-size: 14px;
+    font-family: Inter, sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.register__block-button:hover {
+    animation: scaling 1000ms infinite ease;
+}
+
+@media screen and (max-width: 500px) {
+    .register__block-button {
+        width: 260px;
+        margin-top: 222px;
+        font-size: 12px;
+        font-style: normal;
+        line-height: normal;
+    }
+}
+
+
+.register__registration-block {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    width: 369px;
+    margin: 2px auto 0;
+}
+
+.register__block-registration-q {
+    color: #8B8B8B;
+    text-align: center;
+    font-size: 14px;
+    font-family: Inter, sans-serif;
+}
+
+@media screen and (max-width: 500px) {
+    .register__block-registration-q {
+        font-size: 12px;
+    }
+}
+
+.register__block-registration_link {
+    color: #4285F4;
+    text-align: center;
+    font-size: 14px;
+    font-family: Inter, sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.register__block-registration_link:hover {
+    animation: scaling 1000ms infinite ease;
+}
+
+@media screen and (max-width: 500px) {
+    .register__block-registration_link {
+        font-size: 12px;
+    }
+}

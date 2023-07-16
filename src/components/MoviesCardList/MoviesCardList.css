@@ -1,0 +1,41 @@
+.background-movies-card-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    background-color: #202020;
+}
+
+.movies-card-list {
+    display: flex;
+    justify-content: center;
+    flex-flow: row wrap;
+    background-color: #202020;
+    margin: 0;
+    padding: 70px 70px 10px;
+    gap: 32px 30px;
+    max-width: 1140px;
+    flex: 1;
+}
+
+@media screen and (max-width: 990px) {
+    .movies-card-list {
+        padding: 70px 30px 30px;
+        gap: 35px 24px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .movies-card-list {
+        justify-content: flex-start;
+    }
+}
+
+
+@media screen and (max-width: 760px) {
+    .movies-card-list {
+        padding: 40px 10px 30px;
+        gap: 16px;
+        justify-content: center;
+    }
+}
