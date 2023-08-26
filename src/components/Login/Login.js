@@ -27,7 +27,7 @@ function Login(props) {
     return (
         <section className="login">
             <div className="login__block">
-                <Link to="/">
+                <Link to="/about">
                     <img className="login__block-logo" src={logo} alt="Обозреватель фильмов"></img>
                 </Link>
                 <h1 className="login__block-title">Рады видеть!</h1>

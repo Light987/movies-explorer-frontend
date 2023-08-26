@@ -6,6 +6,16 @@ const configApi = {
     },
 };
 
+
+const configMovieApi = {
+    url: 'https://api.nomoreparties.co',
+    headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    },
+};
+
 export {
-    configApi
+    configApi, configMovieApi
 }
+// 158.160.20.167

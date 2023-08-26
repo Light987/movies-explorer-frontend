@@ -32,7 +32,6 @@ function Profile(props) {
         setEmail(e.target.value);
     }
 
-    console.log(props.isEditProfile)
     return (
         <section className="profile">
             <h1 className="profile__title">Привет, {name}</h1>
@@ -72,7 +71,7 @@ function Profile(props) {
                 </button> : <button className="profile__container-edit" type="button"
                                     onClick={handleSubmit}>Сохранить </button>}
             </form>
-            <Link to="/" className="profile__container-logout" onClick={props.onSignout}>Выйти из аккаунта</Link>
+            <Link to="/about" className="profile__container-logout" onClick={props.onSignout}>Выйти из аккаунта</Link>
         </section>
     );
 }

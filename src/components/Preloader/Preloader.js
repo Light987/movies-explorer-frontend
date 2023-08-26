@@ -5,9 +5,15 @@ function Preloader(props) {
 
     return (
         <section className="preloader">
-            <button className={`preloader__container ${props.maxMovies === props.moviesLen ? "preloader__hide" : ""}`} onClick={props.morePosts ? props.morePosts : []} type='button'>
-                Ещё
-            </button>
+            {props.isSuccess &&
+                <span className="preloader__text">Ничего не найдено</span>}
+            {!props.isSuccess &&
+                <button
+                    className={`preloader__container ${(props.movies.length === props.maxMovies) || (props.movies.length <= props.count) ? "preloader__hide" : ""}`}
+                    type='button'
+                    onClick={props.handleMoreMovies}>
+                    <span className="preloader__text">Ещё</span>
+                </button>}
         </section>
     )
 }

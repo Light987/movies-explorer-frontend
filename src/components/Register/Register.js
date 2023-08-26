@@ -26,7 +26,7 @@ function Register(props) {
     return (
         <section className="register">
             <div className="register__block">
-                <Link to="/">
+                <Link to="/about">
                     <img className="register__block-logo" src={logo} alt="Обозреватель фильмов"></img>
                 </Link>
                 <h1 className="register__block-title">Добро пожаловать!</h1>

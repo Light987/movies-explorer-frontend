@@ -1,5 +1,5 @@
 import auth from "../../utils/Auth";
-import {Routes, Route, Navigate, useNavigate, useSearchParams} from "react-router-dom";
+import {Routes, Route, Navigate, useNavigate, useLocation} from "react-router-dom";
 import Main from '../Main/Main'
 import Movies from '../Movies/Movies'
 import SavedMovies from '../SavedMovies/SavedMovies'
@@ -9,41 +9,35 @@ import Register from '../Register/Register'
 import NotFound from '../NotFound/NotFound'
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import React, {useEffect, useState} from "react";
-import useResize from '../../utils/useResize';
 
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
-import api from "../../utils/Api";
+import mainApi from "../../utils/MainApi";
+import movieApi from "../../utils/MoviesApi";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import moviesApi from "../../utils/MoviesApi";
+import MainApi from "../../utils/MainApi";
 
-import moviess from "../../utils/movies"
-
-let arrayForHoldingMovies = [];
 
 function App() {
     const navigate = useNavigate();
+    const [width, setWidth] = useState(window.innerWidth);
+    const [count, setCount] = useState(0);
     const [currentUser, setCurrentUser] = useState({});
     const [loggedIn, setLoggedIn] = useState(false);
-    const [movies, setMovies] = useState([]);
-    const width = useResize();
+    const [moviesBF, setMoviesBF] = useState([]);
+    const [savedMovies, setSavedMovies] = useState([]);
     const [isOpenBurgerMenu, setIsOpenBurgerMenu] = useState(false);
     const [isEditProfile, setIsEditProfile] = useState(false);
     const [isErrorMessage, setIsErrorMessage] = useState("");
     const [isErrorStatus, setIsErrorStatus] = useState(false);
-    const [moviesToShow, setMoviesToShow] = useState([]);
-    const [moviesPerPage, setMoviesPerPages] = useState(setStep);
-    const [next, setNext] = useState(setStep);
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [isErrorMessageInput, setIsErrorMessageInput] = useState("");
+    const [isErrorStatusInput, setIsErrorStatusInput] = useState(false);
+    const [maxMovies, setMaxMovies] = useState(0);
+    const [maxSavedMovies, setMaxSavedMovies] = useState(0);
+    const [isSavedMovies, setIsSavedMovies] = useState(false)
 
-    const movieQuery = searchParams.get('movie') || ''
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        const form = e.target;
-        const query = form.search.value;
-        setSearchParams({movie: query})
-    }
 
     useEffect(() => {
         const token = localStorage.getItem("jwt");
@@ -59,20 +53,64 @@ function App() {
         }
     }, []);
 
+
     useEffect(() => {
+
+        const movieSearchValue = localStorage.getItem("movieSearchValue");
+
+        const movieCheckBox = localStorage.getItem("movieCheckBox");
+
+        const savedMovieSearchValue = localStorage.getItem("savedMovieSearchValue");
+
+        const savedMovieCheckBox = localStorage.getItem("savedMovieCheckBox");
+
         if (loggedIn) {
-            Promise.all([api.getUserInfo(), api.getAllCards()])
-                .then(([profileInfo, movies]) => {
+            Promise.all([mainApi.getUserInfo(), mainApi.getSavedMovies(), moviesApi.getAllMovies()])
+                .then(([profileInfo, savedMovies, movies]) => {
                     setCurrentUser(profileInfo);
-                    setMovies(movies.reverse().map((movie) => ({...movie})));
+
+                    setSavedMovies(savedMovies.reverse());
+
+                    if (movieCheckBox) {
+                        const filteredMovies = movies.filter((movie) => movie.duration <= 40);
+                        setMoviesBF(filteredMovies);
+                        setMaxMovies(filteredMovies.length);
+                    }
+
+                    if (movieSearchValue) {
+                        const filteredMovies = movies.filter((movie) => movie.nameRU.toLowerCase().includes(movieSearchValue.toLowerCase()));
+                        setMoviesBF(filteredMovies);
+                        setMaxMovies(filteredMovies.length);
+                    }
+
+                    if (savedMovieSearchValue) {
+                        const filteredMovies = savedMovies.filter((movie) => movie.duration <= 40);
+                        setSavedMovies(filteredMovies);
+                        setMaxSavedMovies(filteredMovies.length);
+                    }
+
+                    if (savedMovieCheckBox) {
+                        const filteredMovies = savedMovies.filter((movie) => movie.nameRU.toLowerCase().includes(savedMovieSearchValue.toLowerCase()));
+                        setSavedMovies(filteredMovies);
+                        setMaxSavedMovies(filteredMovies.length);
+                    }
                 })
                 .catch((err) => console.log(err));
         }
     }, [loggedIn]);
 
     useEffect(() => {
+        window.addEventListener("resize", () => {
+            setWidth(window.innerWidth);
+        });
 
-        loopWithSlice(0, moviesPerPage);
+        if (width >= 1280) {
+            setCount(12);
+        } else if (width > 635 && width < 1280) {
+            setCount(8);
+        } else {
+            setCount(5);
+        }
     }, []);
 
     function handleRegister(regUserData) {
@@ -104,21 +142,196 @@ function App() {
                 console.log(err);
             });
     }
+    const {pathname} = useLocation();
+    console.log(pathname)
 
     function handleSignOut() {
+        navigate("/about", {replace: true});
         setLoggedIn(false);
-        localStorage.removeItem("jwt");
-        navigate("/", {replace: true});
+        localStorage.clear();
+        setMoviesBF([]);
+        setMaxMovies(0);
+        setSavedMovies([]);
+        setMaxSavedMovies(0);
     }
+
+    console.log(loggedIn)
 
     function handleUpdateUser(newUserInfo) {
 
-        api
+        mainApi
             .patchUserInfo(newUserInfo)
             .then((data) => {
                 setCurrentUser(data);
             })
             .catch((err) => console.log(err))
+    }
+
+
+    function handleSearchMovie(value) {
+        localStorage.setItem("movieSearchValue", value);
+        if (value === '') {
+            errorInput("Нужно ввести ключевое слово", true);
+        } else {
+            movieApi.getAllMovies()
+                .then((movies) => {
+                    const filteredMovies = movies.filter((movie) => {
+                        return movie.nameRU.toLowerCase().includes(value.toLowerCase());
+                    });
+                    setMoviesBF(filteredMovies);
+                    setMaxMovies(filteredMovies.length);
+                    error("", false);
+                    errorInput("", false);
+
+
+                    if (width >= 1280) {
+                        setCount(12);
+                    } else if (width > 635 && width < 1280) {
+                        setCount(8);
+                    } else {
+                        setCount(5);
+                    }
+
+                    if (filteredMovies.length === 0) {
+                        error("Ничего не найдено", true);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                    error("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз", true)
+                });
+        }
+    }
+
+    function handleSearchSavedMovie(value) {
+        localStorage.setItem("savedMovieSearchValue", value);
+        if (value === '') {
+            errorInput("Нужно ввести ключевое слово", true);
+        } else {
+            MainApi.getSavedMovies()
+                .then((movies) => {
+                    const filteredMovies = movies.filter((movie) => {
+                        return movie.nameRU.toLowerCase().includes(value.toLowerCase());
+                    });
+                    setSavedMovies(filteredMovies);
+                    setMaxSavedMovies(filteredMovies.length);
+                    error("", false);
+                    errorInput("", false);
+
+
+                    if (width >= 1280) {
+                        setCount(12);
+                    } else if (width > 635 && width < 1280) {
+                        setCount(8);
+                    } else {
+                        setCount(5);
+                    }
+
+                    if (filteredMovies.length === 0) {
+                        error("Ничего не найдено", true);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                    error("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз", true)
+                });
+        }
+    }
+
+    function handleShortMovie(value) {
+        localStorage.setItem("movieCheckBox", value);
+
+        if (value) {
+            moviesApi.getAllMovies()
+                .then((movies) => {
+                    const filteredMovies = movies.filter((movie) => {
+                        return movie.duration <= 40;
+                    });
+                    setMoviesBF(filteredMovies);
+                    setMaxMovies(filteredMovies.length);
+                    error("", false);
+
+                    if (width >= 1280) {
+                        setCount(12);
+                    } else if (width > 635 && width < 1280) {
+                        setCount(8);
+                    } else {
+                        setCount(5);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                    error("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз", true)
+                });
+        } else {
+            setMoviesBF([]);
+            setMaxMovies(moviesBF.length);
+            if (setMoviesBF.length === 0) {
+                error("Ничего не найдено", true);
+            }
+        }
+    }
+
+    function handleShortSavedMovie(value) {
+        localStorage.setItem("savedMovieCheckBox", value);
+
+        if (value) {
+            MainApi.getSavedMovies()
+                .then((movies) => {
+                    const filteredMovies = movies.filter((movie) => {
+                        return movie.duration <= 40;
+                    });
+                    setSavedMovies(filteredMovies);
+                    setMaxSavedMovies(filteredMovies.length);
+                    error("", false);
+
+                    if (width >= 1280) {
+                        setCount(12);
+                    } else if (width > 635 && width < 1280) {
+                        setCount(8);
+                    } else {
+                        setCount(5);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                    error("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз", true)
+                });
+        } else {
+            setSavedMovies([]);
+            setMaxSavedMovies(savedMovies.length);
+            if (setMoviesBF.length === 0) {
+                error("Ничего не найдено", true);
+            }
+        }
+    }
+
+    function handleMoreMovies() {
+        if (width >= 1280) {
+            setCount(count + 3);
+        } else if (width > 635 && width <= 1280) {
+            setCount(count + 2);
+        } else {
+            setCount(count + 1);
+        }
+    }
+
+    function handleSaveMovie(data) {
+        mainApi.postMovie(data)
+            .then((movie) => {
+                setSavedMovies([movie, ...savedMovies]);
+            })
+            .catch((err) => console.log(err.message));
+    }
+
+    function handleDeleteMovie(movie) {
+        const id = movie._id ? movie._id : savedMovies.find(savedMovie => savedMovie.movieId === movie.id)._id;
+        mainApi.deleteMovie(id)
+            .then(() => {
+                const newSavedMovies = savedMovies.filter((item) => item._id !== id);
+                setSavedMovies(newSavedMovies);
+            })
+            .catch((err) => console.log(err.message));
     }
 
     function closeBurgerMenu() {
@@ -130,37 +343,18 @@ function App() {
         setIsErrorStatus(isSuccess);
     }
 
-    const loopWithSlice = (start, end) => {
-        const slicedMovies = moviess.slice(start, end);
-        arrayForHoldingMovies = [...arrayForHoldingMovies, ...slicedMovies];
-        setMoviesToShow(arrayForHoldingMovies);
-    };
-
-    function setStep() {
-        if (width >= 1280) {
-            return 12
-        } else if (width >= 768 && width < 1280) {
-            return 8
-        } else {
-            return 5
-        }
+    function errorInput(message, isSuccess) {
+        setIsErrorMessageInput(message);
+        setIsErrorStatusInput(isSuccess);
     }
 
-    const handleShowMoreMovies = () => {
-        loopWithSlice(next, next + moviesPerPage);
-        setNext(next + moviesPerPage);
-    };
-
-    function handleMovieLike(movie) {
-        const isLiked = movie.isLiked;
-
-        movie.isLiked = !isLiked;
-        loopWithSlice(next, moviesPerPage);
-    }
 
     function handleEditProfile() {
         setIsEditProfile(false);
     }
+
+    const checkIsSaved = (movie) => savedMovies.some((savedMovies) => savedMovies.movieId === movie.id);
+
 
     return (<CurrentUserContext.Provider value={currentUser}>
         <div className="app">
@@ -168,45 +362,82 @@ function App() {
 
             <Header onBurgerMenu={setIsOpenBurgerMenu} width={width}/>
             <Routes>
-                <Route
-                    path="/"
-                    element={loggedIn ? (<Navigate to="/movies" replace/>) : (<Navigate to="/about" replace/>)}
-                />
-
-                <Route path="/about" element={<Main/>}/>
-
-                <Route path="/movies" element={<Movies movieLike={handleMovieLike}
-                                                       maxMovies={moviess.length}
-                                                       moviesToRender={moviesToShow}
-                                                       showMoreMovies={handleShowMoreMovies}
-                                                       handleSubmit={handleSubmit}
-                                                       movieQuery={movieQuery}/>}/>
-
-                <Route path="/saved-movies" element={<SavedMovies onBurgerMenu={setIsOpenBurgerMenu}
-                                                                  moviesToRender={moviesToShow}
-                                                                  width={width}
-                                                                  movieLike={handleMovieLike}
-                                                                  handleSubmit={handleSubmit}
-                                                                  movieQuery={movieQuery}/>}/>
-
-                <Route path="/profile"
-                       element={<Profile isEditProfile={isEditProfile}
-                                         onEditProfile={setIsEditProfile}
-                                         handleEditProfile={handleEditProfile}
-                                         onUpdateUser={handleUpdateUser}
-                                         onSignout={handleSignOut}/>}/>
 
                 <Route path="/signin" element={<Login onLogin={handleLogin}/>}/>
 
                 <Route path="/signup"
-                       element={<Register isSuccess={isErrorStatus} isError={isErrorMessage}
+                       element={<Register isSuccess={isErrorStatus}
+                                          isError={isErrorMessage}
                                           onRegister={handleRegister}/>}/>
+
+
+                <Route path="/about" element={<Main/>}/>
+
+                <Route
+                    path="/movies"
+                    element={<ProtectedRoute
+                        loggedIn={loggedIn}
+                        element={Movies}
+                        movies={moviesBF}
+                        checkIsSaved={checkIsSaved}
+                        handleSearchMovie={handleSearchMovie}
+                        handleShortMovie={handleShortMovie}
+                        isSavedMovies={isSavedMovies}
+                        setIsSavedMovies={setIsSavedMovies}
+                        isError={isErrorMessage}
+                        isSuccess={isErrorStatus}
+                        isErrorInput={isErrorMessageInput}
+                        isSuccessInput={isErrorStatusInput}
+                        maxMovies={maxMovies}
+                        width={width}
+                        count={count}
+                        setCount={setCount}
+                        handleSaveMovie={handleSaveMovie}
+                        handleDeleteMovie={handleDeleteMovie}
+                        handleMoreMovies={handleMoreMovies}
+                    />}/>
+
+                <Route
+                    path="/saved-movies"
+
+                    element={<ProtectedRoute
+                        loggedIn={loggedIn}
+                        element={SavedMovies}
+                        savedMovies={savedMovies}
+                        handleSearchMovie={handleSearchSavedMovie}
+                        handleShortMovie={handleShortSavedMovie}
+                        isSavedMovies={!checkIsSaved}
+                        setIsSavedMovies={setIsSavedMovies}
+                        isError={isErrorMessage}
+                        isSuccess={isErrorStatus}
+                        isErrorInput={isErrorMessageInput}
+                        isSuccessInput={isErrorStatusInput}
+                        maxSavedMovies={maxSavedMovies}
+                        width={width}
+                        count={count}
+                        setCount={setCount}
+                        handleSaveMovie={handleSaveMovie}
+                        handleDeleteMovie={handleDeleteMovie}
+                        handleMoreMovies={handleMoreMovies}
+                    />}/>
+
+                <Route path="/profile"
+                       element={<ProtectedRoute
+                           loggedIn={loggedIn}
+                           element={Profile}
+                           isEditProfile={isEditProfile}
+                           onEditProfile={setIsEditProfile}
+                           handleEditProfile={handleEditProfile}
+                           onUpdateUser={handleUpdateUser}
+                           onSignout={handleSignOut}/>}/>
 
                 <Route path="/404" element={<NotFound/>}/>
                 <Route path="*" element={<Navigate to="/404"/>}/>
+
             </Routes>
 
             <BurgerMenu isOpened={isOpenBurgerMenu} onClose={closeBurgerMenu}/>
+
 
             <Footer/>
         </div>

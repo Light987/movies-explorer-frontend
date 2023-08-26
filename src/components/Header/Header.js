@@ -14,7 +14,7 @@ function Header(props) {
                     <nav className="header__nav">
                         <ul className="header__profile">
                             <li className="header__item-profile">
-                                <Link to="/">
+                                <Link to="/about">
                                     <img className="header__logo" src={logo} alt="Обозреватель фильмов"/>
                                 </Link>
                             </li>
@@ -42,7 +42,7 @@ function Header(props) {
                         <nav className="header__nav">
                             <ul className="header__profile header__profile_movies">
                                 <li className="header__profile-list-item">
-                                    <Link to="/">
+                                    <Link to="/about">
                                         <img className="header__logo" src={logo} alt="Обозреватель фильмов"/>
                                     </Link>
                                 </li>

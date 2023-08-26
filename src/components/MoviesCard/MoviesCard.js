@@ -5,30 +5,39 @@ import {useLocation} from "react-router-dom";
 
 function MoviesCard(props) {
     const {pathname} = useLocation();
-    const isLiked = props.movie.isLiked
 
-    const cardLikeButtonClassName = pathname === "/saved-movies" ? "movies-card__button" : `movies-card__button ${
-        isLiked && "movies-card__button-check"
-    }`;
+    const isLike = props.checkIsSaved ? props.checkIsSaved(props.movie) : pathname === '/saved-movies';
 
-    function handleLikeClick() {
-        props.onMovieLike(props.movie);
-    }
+    const handleLikeClick = () => isLike ? props.handleDeleteMovie(props.movie) : props.handleSaveMovie(props.movie);
+
+
+    const cardLikeButtonClassName = `movies-card__button ${isLike ? 'movies-card__button-check' : ''}`
+
+    console.log(isLike)
 
     return (
-        <li className="movies-card">
+        <>
             <div className="movies-card__head">
-                <h2 className="movies-card__head-title">{props.movie.name}</h2>
-                <p className="movies-card__head-time">{props.movie.duration}</p>
+                <h2 className="movies-card__head-title">{props.movie.nameRU}</h2>
+                <p className="movies-card__head-time">{props.movie.duration} минуты</p>
             </div>
-            <img src={props.movie.thumbNail} className="movies-card__img" alt={props.movie.name}></img>
-            <button type='button'
-                className={cardLikeButtonClassName}
-                onClick={handleLikeClick}>
-                {isLiked ?
-                <img src={pathname === "/saved-movies" ? delMovies : addMovies} alt="Добавить в избранное"></img> : "Сохранить"}
-            </button>
-        </li>
+            <img
+                src={`${pathname === "/saved-movies" ? props.movie.image : "https://api.nomoreparties.co" + props.movie.image.url}`}
+                className="movies-card__img" alt={props.movie.nameRU}></img>
+            {pathname === '/movies' ? (
+                <button onClick={handleLikeClick}
+                        className={cardLikeButtonClassName}
+                        type='button'>
+                    {isLike ?
+                        <img src={addMovies}
+                             alt="Добавить в избранное"></img> : "Сохранить"}
+                </button>
+            ) : (
+                <button onClick={handleLikeClick} className='movies-card__button' type='button'>
+                    <img src={delMovies} alt="Удалить из избранное"></img>
+                </button>
+            )}
+        </>
     );
 }
 

@@ -4,13 +4,17 @@ import Preloader from "../Preloader/Preloader";
 
 function Movies(props) {
 
+    const moviesSlice = props.movies.slice(0, props.count);
+
     return (
         <main className="main">
-            <SearchForm handleSubmit={props.handleSubmit}/>
-            <MoviesCardList movies={props.moviesToRender} onMovieLike={props.movieLike}
-                            movieQuery={props.movieQuery}/>
-            <Preloader maxMovies={props.maxMovies} moviesLen={props.moviesToRender.length}
-                       morePosts={props.showMoreMovies}/>
+            <SearchForm handleSearchMovie={props.handleSearchMovie} handleShortMovie={props.handleShortMovie}
+                        isErrorInput={props.isErrorInput} isSuccessInput={props.isSuccessInput}/>
+            <MoviesCardList movies={moviesSlice}
+                            handleSaveMovie={props.handleSaveMovie} handleDeleteMovie={props.handleDeleteMovie}
+                            checkIsSaved={props.checkIsSaved}/>
+            <Preloader movies={moviesSlice} isError={props.isError} isSuccess={props.isSuccess}
+                       handleMoreMovies={props.handleMoreMovies} maxMovies={props.maxMovies}/>
         </main>
     )
 }
