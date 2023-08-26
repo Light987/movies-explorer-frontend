@@ -8,3 +8,9 @@
 ## Ссылка на figma
 
 https://disk.yandex.ru/d/2BrOma_OAblHBw
+
+## Ссылка на пулреквест
+https://github.com/Light987/movies-explorer-frontend/pull/2
+
+## Ссылка на проект
+https://my-movies-explorer.nomoredomains.rocks/#/about

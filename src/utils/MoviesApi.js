@@ -19,7 +19,6 @@ class MovieApi {
         return fetch(`${this._url}/beatfilm-movies`, {
             headers: {
                 "Content-Type": "application/json",
-                authorization: `Bearer ${localStorage.getItem("jwt")}`,
             }
         })
             .then(this._checkResponse)

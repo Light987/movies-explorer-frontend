@@ -1,5 +1,5 @@
 import auth from "../../utils/Auth";
-import {Routes, Route, Navigate, useNavigate, useLocation} from "react-router-dom";
+import {Routes, Route, Navigate, useNavigate} from "react-router-dom";
 import Main from '../Main/Main'
 import Movies from '../Movies/Movies'
 import SavedMovies from '../SavedMovies/SavedMovies'
@@ -142,8 +142,6 @@ function App() {
                 console.log(err);
             });
     }
-    const {pathname} = useLocation();
-    console.log(pathname)
 
     function handleSignOut() {
         navigate("/about", {replace: true});
@@ -154,8 +152,6 @@ function App() {
         setSavedMovies([]);
         setMaxSavedMovies(0);
     }
-
-    console.log(loggedIn)
 
     function handleUpdateUser(newUserInfo) {
 
@@ -354,7 +350,6 @@ function App() {
     }
 
     const checkIsSaved = (movie) => savedMovies.some((savedMovies) => savedMovies.movieId === movie.id);
-
 
     return (<CurrentUserContext.Provider value={currentUser}>
         <div className="app">
