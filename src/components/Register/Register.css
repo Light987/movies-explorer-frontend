@@ -126,6 +126,15 @@ form {
     animation: scaling 1000ms infinite ease;
 }
 
+.register__block-button_disable {
+    background-color: #2f2f2f;
+}
+
+.register__block-button_disable:hover {
+    animation: none;
+    cursor: default;
+}
+
 @media screen and (max-width: 500px) {
     .register__block-button {
         width: 260px;

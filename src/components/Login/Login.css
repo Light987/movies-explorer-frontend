@@ -108,6 +108,15 @@
     }
 }
 
+.login__block-button_disable {
+    background-color: #2f2f2f;
+}
+
+.login__block-button_disable:hover {
+    animation: none;
+    cursor: default;
+}
+
 
 .login__registration-block {
     display: flex;

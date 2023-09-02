@@ -8,12 +8,18 @@ function SavedMovies(props) {
 
     return (
         <main className="main">
-            <SearchForm handleSearchMovie={props.handleSearchMovie} handleShortMovie={props.handleShortMovie}
-                        isErrorInput={props.isErrorInput} isSuccessInput={props.isSuccessInput}/>
+            <SearchForm handleSearchMovie={props.handleSearchMovie}
+                        isShortMovies={props.isShortMovies}
+                        setIsShortMovies={props.setIsShortMovies}
+                        handleChangeChk={props.handleChangeChk}
+                        isErrorInput={props.isErrorInput}
+                        isSuccessInput={props.isSuccessInput}
+                        setLoading={props.setLoading}/>
             <MoviesCardList movies={savedMoviesSlice} isSavedMovies={props.isSavedMovies}
                             handleSaveMovie={props.handleSaveMovie} handleDeleteMovie={props.handleDeleteMovie}/>
             <Preloader movies={savedMoviesSlice} isError={props.isError} isSuccess={props.isSuccess}
-                       handleMoreMovies={props.handleMoreMovies} maxMovies={props.maxSavedMovies}/>
+                       handleMoreMovies={props.handleMoreMovies} maxMovies={props.maxSavedMovies}
+                       loading={props.loading}/>
         </main>
     )
 }

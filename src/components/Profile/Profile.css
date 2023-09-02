@@ -118,6 +118,11 @@
     }
 }
 
+.profile__container-edit_update {
+    color: #3DDC84;
+    animation: scaling 1000ms infinite ease;
+}
+
 .profile__container-logout {
     color: #EE3465;
     text-align: center;

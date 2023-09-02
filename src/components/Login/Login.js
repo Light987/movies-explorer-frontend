@@ -11,18 +11,25 @@ function Login(props) {
         password: "",
     });
 
+    const [isValidLogin, setIsValidLogin] = useState(false)
+
     const handleChange = (evt) => {
         const {name, value} = evt.target;
         setFormValue({
             ...formValue,
             [name]: value,
         });
+
+        setIsValidLogin((name !== '') && (value !== ''))
+
     };
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
         props.onLogin(formValue);
     };
+
+
 
     return (
         <section className="login">
@@ -50,7 +57,7 @@ function Login(props) {
                            value={formValue.password || ""}
                            onChange={handleChange}
                            placeholder='Введите пароль'/>
-                    <button className="login__block-button" type="submit">Войти</button>
+                    <button className={`login__block-button ${isValidLogin ? '' : "login__block-button_disable"}`} type="submit" disabled={!isValidLogin}>Войти</button>
                 </form>
                 <div className="login__registration-block">
                     <p className="login__block-registration-q">Ещё не зарегистрированы?</p>

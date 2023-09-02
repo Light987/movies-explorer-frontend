@@ -9,6 +9,8 @@ function Register(props) {
         password: "",
     });
 
+    const [isValidReg, setIsValidReg] = useState(false)
+
     const handleChange = (evt) => {
         const {name, value} = evt.target;
 
@@ -16,6 +18,8 @@ function Register(props) {
             ...regFormValue,
             [name]: value,
         });
+
+        setIsValidReg((name !== '') && (value !== ''))
     };
 
     const handleSubmit = (evt) => {
@@ -62,7 +66,7 @@ function Register(props) {
                            placeholder='Введите пароль'/>
                     <span
                         className={`register__block-error ${props.isSuccess ? "register__block-error_open" : ""}`}>{props.isError}</span>
-                    <button className="register__block-button" type="submit">Зарегистрироваться</button>
+                    <button className={`register__block-button ${isValidReg ? '' : "register__block-button_disable"}`} type="submit" disabled={!isValidReg}>Зарегистрироваться</button>
                 </form>
                 <div className="register__registration-block">
                     <p className="register__block-registration-q">Уже зарегистрированы?</p>

@@ -14,10 +14,8 @@ import CurrentUserContext from "../../contexts/CurrentUserContext";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import mainApi from "../../utils/MainApi";
-import movieApi from "../../utils/MoviesApi";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import moviesApi from "../../utils/MoviesApi";
-import MainApi from "../../utils/MainApi";
 
 
 function App() {
@@ -25,9 +23,11 @@ function App() {
     const [width, setWidth] = useState(window.innerWidth);
     const [count, setCount] = useState(0);
     const [currentUser, setCurrentUser] = useState({});
-    const [loggedIn, setLoggedIn] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(true);
     const [moviesBF, setMoviesBF] = useState([]);
+    const [filteredMoviesBF, setFilteredMoviesBF] = useState([]);
     const [savedMovies, setSavedMovies] = useState([]);
+    const [filteredSavedMovies, setFilteredSavedMovies] = useState([]);
     const [isOpenBurgerMenu, setIsOpenBurgerMenu] = useState(false);
     const [isEditProfile, setIsEditProfile] = useState(false);
     const [isErrorMessage, setIsErrorMessage] = useState("");
@@ -35,8 +35,11 @@ function App() {
     const [isErrorMessageInput, setIsErrorMessageInput] = useState("");
     const [isErrorStatusInput, setIsErrorStatusInput] = useState(false);
     const [maxMovies, setMaxMovies] = useState(0);
-    const [maxSavedMovies, setMaxSavedMovies] = useState(0);
     const [isSavedMovies, setIsSavedMovies] = useState(false)
+    const [isShortMovies, setIsShortMovies] = useState(false);
+    const [isShortSavedMovies, setIsShortSavedMovies] = useState(false);
+    const [updateProf, setUpdateProf] = useState(false);
+    const [loading, setLoading] = useState(false)
 
 
     useEffect(() => {
@@ -56,43 +59,38 @@ function App() {
 
     useEffect(() => {
 
-        const movieSearchValue = localStorage.getItem("movieSearchValue");
+        const movieSearchValue = JSON.parse(localStorage.getItem("movieSearchValue"));
 
-        const movieCheckBox = localStorage.getItem("movieCheckBox");
-
-        const savedMovieSearchValue = localStorage.getItem("savedMovieSearchValue");
-
-        const savedMovieCheckBox = localStorage.getItem("savedMovieCheckBox");
+        if (movieSearchValue === null) {
+            setLoading(false)
+        }
 
         if (loggedIn) {
             Promise.all([mainApi.getUserInfo(), mainApi.getSavedMovies(), moviesApi.getAllMovies()])
                 .then(([profileInfo, savedMovies, movies]) => {
                     setCurrentUser(profileInfo);
 
+
+                    setMoviesBF(movies)
                     setSavedMovies(savedMovies.reverse());
+                    setFilteredSavedMovies(savedMovies.reverse())
+                    setIsShortMovies(movieSearchValue.checkbox);
+                    setLoading(false)
 
-                    if (movieCheckBox) {
+
+                    if (movieSearchValue.search !== '' && !movieSearchValue.checkbox) {
+                        const filteredMovies = movies.filter((movie) => movie.nameRU.toLowerCase().includes(movieSearchValue.search.toLowerCase()));
+                        setFilteredMoviesBF(filteredMovies);
+                        setMaxMovies(filteredMovies.length);
+                    } else if (movieSearchValue.checkbox && movieSearchValue.search !== '') {
+                        const filteredMovies = movies.filter((movie) => movie.nameRU.toLowerCase().includes(movieSearchValue.search.toLowerCase()));
+                        const filteredAndCheckBox = filteredMovies.filter((movie) => movie.duration <= 40);
+                        setFilteredMoviesBF(filteredAndCheckBox);
+                        setMaxMovies(filteredAndCheckBox.length);
+                    } else if (movieSearchValue.checkbox) {
                         const filteredMovies = movies.filter((movie) => movie.duration <= 40);
-                        setMoviesBF(filteredMovies);
+                        setFilteredMoviesBF(filteredMovies);
                         setMaxMovies(filteredMovies.length);
-                    }
-
-                    if (movieSearchValue) {
-                        const filteredMovies = movies.filter((movie) => movie.nameRU.toLowerCase().includes(movieSearchValue.toLowerCase()));
-                        setMoviesBF(filteredMovies);
-                        setMaxMovies(filteredMovies.length);
-                    }
-
-                    if (savedMovieSearchValue) {
-                        const filteredMovies = savedMovies.filter((movie) => movie.duration <= 40);
-                        setSavedMovies(filteredMovies);
-                        setMaxSavedMovies(filteredMovies.length);
-                    }
-
-                    if (savedMovieCheckBox) {
-                        const filteredMovies = savedMovies.filter((movie) => movie.nameRU.toLowerCase().includes(savedMovieSearchValue.toLowerCase()));
-                        setSavedMovies(filteredMovies);
-                        setMaxSavedMovies(filteredMovies.length);
                     }
                 })
                 .catch((err) => console.log(err));
@@ -113,12 +111,21 @@ function App() {
         }
     }, []);
 
+
+    // useEffect(() => {
+    //     if (loggedIn) {
+    //         if (pathname === "/sign-in" || pathname === "/sign-up") {
+    //             navigate('/movie', {replace: true});
+    //         }
+    //     }
+    // }, [loggedIn]);
+
     function handleRegister(regUserData) {
 
         auth
             .register(regUserData)
             .then(() => {
-                navigate("/signin", {replace: true});
+                handleLogin(regUserData)
                 error("", false);
             })
             .catch((err) => {
@@ -150,7 +157,6 @@ function App() {
         setMoviesBF([]);
         setMaxMovies(0);
         setSavedMovies([]);
-        setMaxSavedMovies(0);
     }
 
     function handleUpdateUser(newUserInfo) {
@@ -159,144 +165,165 @@ function App() {
             .patchUserInfo(newUserInfo)
             .then((data) => {
                 setCurrentUser(data);
+                setTimeout(() => setUpdateProf(false), 2000)
+
             })
             .catch((err) => console.log(err))
     }
 
 
-    function handleSearchMovie(value) {
-        localStorage.setItem("movieSearchValue", value);
-        if (value === '') {
+    function handleSearchMovie({valueSearch, valueCheckbox}) {
+        localStorage.setItem("movieSearchValue", JSON.stringify({
+            'search': valueSearch,
+            'checkbox': valueCheckbox
+        }));
+
+        if (valueSearch === '' && !valueCheckbox) {
             errorInput("Нужно ввести ключевое слово", true);
+        } else if (valueCheckbox && valueSearch === '') {
+            const filteredMovies = moviesBF.filter((movie) => {
+                return movie.duration <= 40;
+            });
+            setFilteredMoviesBF(filteredMovies);
+            setMaxMovies(filteredMovies.length);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
+            console.log(loading)
+
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
+        } else if ((valueSearch !== '') && valueCheckbox) {
+            const filteredMovies = moviesBF.filter((movie) => {
+                return movie.nameRU.toLowerCase().includes(valueSearch.toLowerCase());
+            });
+            const filteredMoviesAndShort = filteredMovies.filter((movie) => {
+                return movie.duration <= 40;
+            });
+            setFilteredMoviesBF(filteredMoviesAndShort);
+            setMaxMovies(filteredMoviesAndShort.length);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
+            console.log(loading)
+
+
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
+
+            if (filteredMovies.length === 0) {
+                error("Ничего не найдено", true);
+            }
         } else {
-            movieApi.getAllMovies()
-                .then((movies) => {
-                    const filteredMovies = movies.filter((movie) => {
-                        return movie.nameRU.toLowerCase().includes(value.toLowerCase());
-                    });
-                    setMoviesBF(filteredMovies);
-                    setMaxMovies(filteredMovies.length);
-                    error("", false);
-                    errorInput("", false);
+            const filteredMovies = moviesBF.filter((movie) => {
+                return movie.nameRU.toLowerCase().includes(valueSearch.toLowerCase());
+            });
+            setFilteredMoviesBF(filteredMovies);
+            setMaxMovies(filteredMovies.length);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
+            console.log(loading)
 
 
-                    if (width >= 1280) {
-                        setCount(12);
-                    } else if (width > 635 && width < 1280) {
-                        setCount(8);
-                    } else {
-                        setCount(5);
-                    }
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
 
-                    if (filteredMovies.length === 0) {
-                        error("Ничего не найдено", true);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                    error("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз", true)
-                });
-        }
-    }
-
-    function handleSearchSavedMovie(value) {
-        localStorage.setItem("savedMovieSearchValue", value);
-        if (value === '') {
-            errorInput("Нужно ввести ключевое слово", true);
-        } else {
-            MainApi.getSavedMovies()
-                .then((movies) => {
-                    const filteredMovies = movies.filter((movie) => {
-                        return movie.nameRU.toLowerCase().includes(value.toLowerCase());
-                    });
-                    setSavedMovies(filteredMovies);
-                    setMaxSavedMovies(filteredMovies.length);
-                    error("", false);
-                    errorInput("", false);
-
-
-                    if (width >= 1280) {
-                        setCount(12);
-                    } else if (width > 635 && width < 1280) {
-                        setCount(8);
-                    } else {
-                        setCount(5);
-                    }
-
-                    if (filteredMovies.length === 0) {
-                        error("Ничего не найдено", true);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                    error("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз", true)
-                });
-        }
-    }
-
-    function handleShortMovie(value) {
-        localStorage.setItem("movieCheckBox", value);
-
-        if (value) {
-            moviesApi.getAllMovies()
-                .then((movies) => {
-                    const filteredMovies = movies.filter((movie) => {
-                        return movie.duration <= 40;
-                    });
-                    setMoviesBF(filteredMovies);
-                    setMaxMovies(filteredMovies.length);
-                    error("", false);
-
-                    if (width >= 1280) {
-                        setCount(12);
-                    } else if (width > 635 && width < 1280) {
-                        setCount(8);
-                    } else {
-                        setCount(5);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                    error("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз", true)
-                });
-        } else {
-            setMoviesBF([]);
-            setMaxMovies(moviesBF.length);
-            if (setMoviesBF.length === 0) {
+            if (filteredMovies.length === 0) {
                 error("Ничего не найдено", true);
             }
         }
     }
 
-    function handleShortSavedMovie(value) {
-        localStorage.setItem("savedMovieCheckBox", value);
+    function handleSearchSavedMovie({valueSearch, valueCheckbox}) {
 
-        if (value) {
-            MainApi.getSavedMovies()
-                .then((movies) => {
-                    const filteredMovies = movies.filter((movie) => {
-                        return movie.duration <= 40;
-                    });
-                    setSavedMovies(filteredMovies);
-                    setMaxSavedMovies(filteredMovies.length);
-                    error("", false);
+        if (valueSearch === '' && !valueCheckbox) {
+            setFilteredSavedMovies(savedMovies);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
 
-                    if (width >= 1280) {
-                        setCount(12);
-                    } else if (width > 635 && width < 1280) {
-                        setCount(8);
-                    } else {
-                        setCount(5);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                    error("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз", true)
-                });
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
+        } else if (valueCheckbox && valueSearch === '') {
+            const filteredMovies = savedMovies.filter((movie) => {
+                return movie.duration <= 40;
+            });
+            setFilteredSavedMovies(filteredMovies);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
+
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
+        } else if ((valueSearch !== '') && valueCheckbox) {
+            const filteredMovies = savedMovies.filter((movie) => {
+                return movie.nameRU.toLowerCase().includes(valueSearch.toLowerCase());
+            });
+            const filteredMoviesAndShort = filteredMovies.filter((movie) => {
+                return movie.duration <= 40;
+            });
+            setFilteredSavedMovies(filteredMoviesAndShort);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
+
+
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
+
+            if (filteredMovies.length === 0) {
+                error("Ничего не найдено", true);
+            }
         } else {
-            setSavedMovies([]);
-            setMaxSavedMovies(savedMovies.length);
-            if (setMoviesBF.length === 0) {
+            const filteredMovies = savedMovies.filter((movie) => {
+                return movie.nameRU.toLowerCase().includes(valueSearch.toLowerCase());
+            });
+            setFilteredSavedMovies(filteredMovies);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
+
+
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
+
+            if (filteredMovies.length === 0) {
                 error("Ничего не найдено", true);
             }
         }
@@ -308,7 +335,7 @@ function App() {
         } else if (width > 635 && width <= 1280) {
             setCount(count + 2);
         } else {
-            setCount(count + 1);
+            setCount(count + 2);
         }
     }
 
@@ -316,6 +343,7 @@ function App() {
         mainApi.postMovie(data)
             .then((movie) => {
                 setSavedMovies([movie, ...savedMovies]);
+                setFilteredSavedMovies([movie, ...savedMovies])
             })
             .catch((err) => console.log(err.message));
     }
@@ -326,6 +354,7 @@ function App() {
             .then(() => {
                 const newSavedMovies = savedMovies.filter((item) => item._id !== id);
                 setSavedMovies(newSavedMovies);
+                setFilteredSavedMovies(newSavedMovies)
             })
             .catch((err) => console.log(err.message));
     }
@@ -346,7 +375,7 @@ function App() {
 
 
     function handleEditProfile() {
-        setIsEditProfile(false);
+        setTimeout(() => setIsEditProfile(false), 2000)
     }
 
     const checkIsSaved = (movie) => savedMovies.some((savedMovies) => savedMovies.movieId === movie.id);
@@ -355,28 +384,19 @@ function App() {
         <div className="app">
 
 
-            <Header onBurgerMenu={setIsOpenBurgerMenu} width={width}/>
+            <Header onBurgerMenu={setIsOpenBurgerMenu} width={width} loggedIn={loggedIn}/>
             <Routes>
-
-                <Route path="/signin" element={<Login onLogin={handleLogin}/>}/>
-
-                <Route path="/signup"
-                       element={<Register isSuccess={isErrorStatus}
-                                          isError={isErrorMessage}
-                                          onRegister={handleRegister}/>}/>
-
-
-                <Route path="/about" element={<Main/>}/>
 
                 <Route
                     path="/movies"
                     element={<ProtectedRoute
                         loggedIn={loggedIn}
                         element={Movies}
-                        movies={moviesBF}
+                        movies={filteredMoviesBF}
+                        isShortMovies={isShortMovies}
                         checkIsSaved={checkIsSaved}
                         handleSearchMovie={handleSearchMovie}
-                        handleShortMovie={handleShortMovie}
+                        setIsShortMovies={setIsShortMovies}
                         isSavedMovies={isSavedMovies}
                         setIsSavedMovies={setIsSavedMovies}
                         isError={isErrorMessage}
@@ -390,30 +410,34 @@ function App() {
                         handleSaveMovie={handleSaveMovie}
                         handleDeleteMovie={handleDeleteMovie}
                         handleMoreMovies={handleMoreMovies}
+                        loading={loading}
+                        setLoading={setLoading}
                     />}/>
 
                 <Route
                     path="/saved-movies"
-
                     element={<ProtectedRoute
                         loggedIn={loggedIn}
                         element={SavedMovies}
-                        savedMovies={savedMovies}
+                        savedMovies={filteredSavedMovies}
                         handleSearchMovie={handleSearchSavedMovie}
-                        handleShortMovie={handleShortSavedMovie}
+                        isShortMovies={isShortSavedMovies}
+                        setIsShortMovies={setIsShortSavedMovies}
                         isSavedMovies={!checkIsSaved}
                         setIsSavedMovies={setIsSavedMovies}
                         isError={isErrorMessage}
                         isSuccess={isErrorStatus}
                         isErrorInput={isErrorMessageInput}
                         isSuccessInput={isErrorStatusInput}
-                        maxSavedMovies={maxSavedMovies}
+                        maxSavedMovies={filteredSavedMovies.length}
                         width={width}
                         count={count}
                         setCount={setCount}
                         handleSaveMovie={handleSaveMovie}
                         handleDeleteMovie={handleDeleteMovie}
                         handleMoreMovies={handleMoreMovies}
+                        loading={loading}
+                        setLoading={setLoading}
                     />}/>
 
                 <Route path="/profile"
@@ -424,13 +448,31 @@ function App() {
                            onEditProfile={setIsEditProfile}
                            handleEditProfile={handleEditProfile}
                            onUpdateUser={handleUpdateUser}
-                           onSignout={handleSignOut}/>}/>
+                           onSignout={handleSignOut}
+                           onUpdateProf={updateProf}
+                           setUpdateProf={setUpdateProf}/>}/>
+
+                <Route path="/signin" element={loggedIn ? (
+                    <Navigate to="/movies" replace/>
+                ) : (
+                    <Login onLogin={handleLogin}/>)}/>
+
+                <Route path="/signup"
+                       element={loggedIn ? (
+                           <Navigate to="/movies" replace/>
+                       ) : (
+                           <Register isSuccess={isErrorStatus}
+                                     isError={isErrorMessage}
+                                     onRegister={handleRegister}/>)
+                       }/>
+
+
+                <Route path="/about" element={<Main loggedIn={loggedIn}/>}/>
 
                 <Route path="/404" element={<NotFound/>}/>
                 <Route path="*" element={<Navigate to="/404"/>}/>
 
             </Routes>
-
             <BurgerMenu isOpened={isOpenBurgerMenu} onClose={closeBurgerMenu}/>
 
 

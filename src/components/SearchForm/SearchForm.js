@@ -3,13 +3,12 @@ import search from "../../images/search.svg";
 
 function SearchForm(props) {
 
+    const handleChangeChk = () => props.setIsShortMovies(!props.isShortMovies)
+
     function handleSubmit(e) {
         e.preventDefault();
-        props.handleSearchMovie(e.target.search.value);
-    }
-
-    function handleChangeChk(e) {
-        props.handleShortMovie(e.target.checked);
+        props.setLoading(true)
+        props.handleSearchMovie({valueSearch: e.target.search.value, valueCheckbox: props.isShortMovies});
     }
 
     return (
@@ -28,7 +27,7 @@ function SearchForm(props) {
                     <label className="search-form__filter">
                         <div className="search-form__filter-inner"></div>
                         <input type="checkbox" className="search-form__filter-checkbox"
-                               onChange={handleChangeChk}></input>
+                               onChange={handleChangeChk} checked={props.isShortMovies}></input>
                         <span className="search-form__filter-text">Короткометражки</span>
                     </label>
                 </form>
