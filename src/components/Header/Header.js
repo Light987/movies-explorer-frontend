@@ -14,7 +14,7 @@ function Header(props) {
                     <nav className="header__nav">
                         <ul className="header__profile">
                             <li className="header__item-profile">
-                                <Link to="/about">
+                                <Link to="/">
                                     <img className="header__logo" src={logo} alt="Обозреватель фильмов"/>
                                 </Link>
                             </li>
@@ -35,14 +35,14 @@ function Header(props) {
             )}
 
             {(props.loggedIn) && (
-                <header className={`header ${(pathname !== "/about") ? "header_movies" : "header_logged"}`}>
+                <header className={`header ${(pathname !== "/") ? "header_movies" : "header_logged"}`}>
 
                     {props.width > 990 ?
 
                         <nav className="header__nav">
-                            <ul className={`header__profile ${pathname !== "/about" ? "header__profile_movies" : "header_logged"}`}>
+                            <ul className={`header__profile ${pathname !== "/" ? "header__profile_movies" : "header_logged"}`}>
                                 <li className="header__profile-list-item">
-                                    <Link to="/about">
+                                    <Link to="/">
                                         <img className="header__logo" src={logo} alt="Обозреватель фильмов"/>
                                     </Link>
                                 </li>

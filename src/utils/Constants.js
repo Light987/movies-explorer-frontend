@@ -18,4 +18,3 @@ const configMovieApi = {
 export {
     configApi, configMovieApi
 }
-// 158.160.20.167

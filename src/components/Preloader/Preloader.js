@@ -3,9 +3,6 @@ import './Preloader.css'
 
 function Preloader(props) {
 
-    console.log(props.loading)
-    console.log(!props.isSuccess)
-
     return (
         <section className="preloader">
             {((props.isSuccess)) &&

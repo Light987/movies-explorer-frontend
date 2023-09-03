@@ -16,7 +16,6 @@ import Header from "../Header/Header";
 import mainApi from "../../utils/MainApi";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import moviesApi from "../../utils/MoviesApi";
-import searchForm from "../SearchForm/SearchForm";
 
 
 function App() {
@@ -24,7 +23,7 @@ function App() {
     const [width, setWidth] = useState(window.innerWidth);
     const [count, setCount] = useState(0);
     const [currentUser, setCurrentUser] = useState({});
-    const [loggedIn, setLoggedIn] = useState(true);
+    const [loggedIn, setLoggedIn] = useState(false);
     const [moviesBF, setMoviesBF] = useState([]);
     const [filteredMoviesBF, setFilteredMoviesBF] = useState([]);
     const [savedMovies, setSavedMovies] = useState([]);
@@ -35,8 +34,6 @@ function App() {
     const [isErrorStatus, setIsErrorStatus] = useState(false);
     const [isErrorMessageInput, setIsErrorMessageInput] = useState("");
     const [isErrorStatusInput, setIsErrorStatusInput] = useState(false);
-    const [maxMovies, setMaxMovies] = useState(0);
-    const [maxSavedMovies, setSavedMaxMovies] = useState(0);
     const [isSavedMovies, setIsSavedMovies] = useState(false)
     const [isShortMovies, setIsShortMovies] = useState(false);
     const [isShortSavedMovies, setIsShortSavedMovies] = useState(false);
@@ -68,7 +65,9 @@ function App() {
                 .checkToken(token)
                 .then((res) => {
                     if (res) {
+                        setCurrentUser(res);
                         setLoggedIn(true);
+
                     }
                 })
                 .catch((err) => console.log(err))
@@ -89,11 +88,11 @@ function App() {
             Promise.all([mainApi.getUserInfo(), mainApi.getSavedMovies(), moviesApi.getAllMovies()])
                 .then(([profileInfo, savedMovies, movies]) => {
                     setCurrentUser(profileInfo);
-
+                    setLoggedIn(true);
 
                     setMoviesBF(movies)
                     setSavedMovies(savedMovies.reverse());
-                    // setFilteredSavedMovies(savedMovies.reverse())
+                    setFilteredSavedMovies(savedMovies.reverse())
                     setIsShortMovies(movieSearchValue.checkbox);
                     setLoading(false)
 
@@ -101,34 +100,28 @@ function App() {
                     if (movieSearchValue.search !== '' && !movieSearchValue.checkbox) {
                         const filteredMovies = movies.filter((movie) => movie.nameRU.toLowerCase().includes(movieSearchValue.search.toLowerCase()));
                         setFilteredMoviesBF(filteredMovies);
-                        setMaxMovies(filteredMovies.length);
                     } else if (movieSearchValue.checkbox && movieSearchValue.search !== '') {
                         const filteredMovies = movies.filter((movie) => movie.nameRU.toLowerCase().includes(movieSearchValue.search.toLowerCase()));
                         const filteredAndCheckBox = filteredMovies.filter((movie) => movie.duration <= 40);
                         setFilteredMoviesBF(filteredAndCheckBox);
-                        setMaxMovies(filteredAndCheckBox.length);
                     } else if (movieSearchValue.checkbox) {
                         const filteredMovies = movies.filter((movie) => movie.duration <= 40);
                         setFilteredMoviesBF(filteredMovies);
-                        setMaxMovies(filteredMovies.length);
                     }
 
                     if (savedMovieSearchValue.search !== '' && !savedMovieSearchValue.checkbox) {
                         const filteredMovies = savedMovies.reverse().filter((movie) => movie.nameRU.toLowerCase().includes(savedMovieSearchValue.search.toLowerCase()));
                         setFilteredSavedMovies(filteredMovies);
                         setIsShortMovies(filteredMovies)
-                        setSavedMaxMovies(filteredMovies.length);
                     } else if (savedMovieSearchValue.checkbox && savedMovieSearchValue.search !== '') {
                         const filteredMovies = savedMovies.reverse().filter((movie) => movie.nameRU.toLowerCase().includes(savedMovieSearchValue.search.toLowerCase()));
                         const filteredAndCheckBox = filteredMovies.filter((movie) => movie.duration <= 40);
                         setFilteredSavedMovies(filteredAndCheckBox);
                         setIsShortMovies(filteredAndCheckBox)
-                        setSavedMaxMovies(filteredAndCheckBox.length);
                     } else if (savedMovieSearchValue.checkbox) {
                         const filteredMovies = savedMovies.reverse().filter((movie) => movie.duration <= 40);
                         setFilteredSavedMovies(filteredMovies);
                         setIsShortMovies(filteredMovies)
-                        setSavedMaxMovies(filteredMovies.length);
                     }
 
                 })
@@ -149,15 +142,6 @@ function App() {
             setCount(5);
         }
     }, []);
-
-
-    // useEffect(() => {
-    //     if (loggedIn) {
-    //         if (pathname === "/sign-in" || pathname === "/sign-up") {
-    //             navigate('/movie', {replace: true});
-    //         }
-    //     }
-    // }, [loggedIn]);
 
     function handleRegister(regUserData) {
 
@@ -190,12 +174,10 @@ function App() {
     }
 
     function handleSignOut() {
-        navigate("/about", {replace: true});
+        navigate("/", {replace: true});
         setLoggedIn(false);
         localStorage.clear();
         setMoviesBF([]);
-        setMaxMovies(0);
-        setSavedMaxMovies(0)
         setSavedMovies([]);
     }
 
@@ -226,7 +208,6 @@ function App() {
                 return movie.duration <= 40;
             });
             setFilteredMoviesBF(filteredMovies);
-            setMaxMovies(filteredMovies.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -250,7 +231,6 @@ function App() {
                 return movie.duration <= 40;
             });
             setFilteredMoviesBF(filteredMoviesAndShort);
-            setMaxMovies(filteredMoviesAndShort.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -272,7 +252,6 @@ function App() {
                 return movie.nameRU.toLowerCase().includes(valueSearch.toLowerCase());
             });
             setFilteredMoviesBF(filteredMovies);
-            setMaxMovies(filteredMovies.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -303,7 +282,6 @@ function App() {
                 return movie.duration <= 40;
             });
             setFilteredMoviesBF(filteredMovies);
-            setMaxMovies(filteredMovies.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -325,7 +303,6 @@ function App() {
                 return movie.duration <= 40;
             });
             setFilteredMoviesBF(filteredMovies);
-            setMaxMovies(filteredMovies.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -348,7 +325,6 @@ function App() {
                 return movie.nameRU.toLowerCase().includes(valueSearch.toLowerCase());
             });
             setFilteredMoviesBF(filteredMovies);
-            setMaxMovies(filteredMovies.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -378,7 +354,6 @@ function App() {
 
         if (valueSearch === '' && !valueCheckbox) {
             setFilteredSavedMovies(savedMovies);
-            setSavedMaxMovies(savedMovies.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -399,7 +374,6 @@ function App() {
                 return movie.duration <= 40;
             });
             setFilteredSavedMovies(filteredMovies);
-            setSavedMaxMovies(filteredMovies.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -423,7 +397,6 @@ function App() {
                 return movie.duration <= 40;
             });
             setFilteredSavedMovies(filteredMoviesAndShort);
-            setSavedMaxMovies(filteredMoviesAndShort.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -445,7 +418,6 @@ function App() {
                 return movie.nameRU.toLowerCase().includes(valueSearch.toLowerCase());
             });
             setFilteredSavedMovies(filteredMovies);
-            setSavedMaxMovies(filteredMovies.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -476,7 +448,6 @@ function App() {
                 return movie.duration <= 40;
             });
             setFilteredSavedMovies(filteredMovies);
-            setSavedMaxMovies(filteredMovies.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -498,7 +469,6 @@ function App() {
                 return movie.duration <= 40;
             });
             setFilteredSavedMovies(filteredMovies);
-            setSavedMaxMovies(filteredMovies.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -521,7 +491,6 @@ function App() {
                 return movie.nameRU.toLowerCase().includes(valueSearch.toLowerCase());
             });
             setFilteredSavedMovies(filteredMovies);
-            setSavedMaxMovies(savedMovies.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -560,7 +529,6 @@ function App() {
                     const filteredMovies = [movie, ...savedMovies].reverse().filter((movie) => movie.nameRU.toLowerCase().includes(savedMovieSearchValue.search.toLowerCase()));
                     setFilteredSavedMovies(filteredMovies);
                     setIsShortMovies(filteredMovies)
-                    setSavedMaxMovies(filteredMovies.length);
 
                     if (filteredMovies.length === 0) {
                         error("Ничего не найдено", true);
@@ -570,7 +538,6 @@ function App() {
                     const filteredAndCheckBox = filteredMovies.filter((movie) => movie.duration <= 40);
                     setFilteredSavedMovies(filteredAndCheckBox);
                     setIsShortMovies(filteredAndCheckBox)
-                    setSavedMaxMovies(filteredAndCheckBox.length);
 
                     if (filteredAndCheckBox.length === 0) {
                         error("Ничего не найдено", true);
@@ -579,7 +546,6 @@ function App() {
                     const filteredMovies = [movie, ...savedMovies].reverse().filter((movie) => movie.duration <= 40);
                     setFilteredSavedMovies(filteredMovies);
                     setIsShortMovies(filteredMovies)
-                    setSavedMaxMovies(filteredMovies.length);
 
                     if (filteredMovies.length === 0) {
                         error("Ничего не найдено", true);
@@ -604,7 +570,6 @@ function App() {
                     const filteredMovies = newSavedMovies.reverse().filter((movie) => movie.nameRU.toLowerCase().includes(savedMovieSearchValue.search.toLowerCase()));
                     setFilteredSavedMovies(filteredMovies);
                     setIsShortMovies(filteredMovies)
-                    setSavedMaxMovies(filteredMovies.length);
 
                     if (filteredMovies.length === 0) {
                         error("Ничего не найдено", true);
@@ -614,7 +579,6 @@ function App() {
                     const filteredAndCheckBox = filteredMovies.filter((movie) => movie.duration <= 40);
                     setFilteredSavedMovies(filteredAndCheckBox);
                     setIsShortMovies(filteredAndCheckBox)
-                    setSavedMaxMovies(filteredAndCheckBox.length);
 
                     if (filteredAndCheckBox.length === 0) {
                         error("Ничего не найдено", true);
@@ -623,7 +587,6 @@ function App() {
                     const filteredMovies = newSavedMovies.reverse().filter((movie) => movie.duration <= 40);
                     setFilteredSavedMovies(filteredMovies);
                     setIsShortMovies(filteredMovies)
-                    setSavedMaxMovies(filteredMovies.length);
 
                     if (filteredMovies.length === 0) {
                         error("Ничего не найдено", true);
@@ -750,7 +713,7 @@ function App() {
                        }/>
 
 
-                <Route path="/about" element={<Main loggedIn={loggedIn}/>}/>
+                <Route path="/" element={<Main />}/>
 
                 <Route path="/404" element={<NotFound/>}/>
                 <Route path="*" element={<Navigate to="/404"/>}/>

@@ -85,7 +85,7 @@ function Profile(props) {
                     <button className={`profile__container-edit ${props.onUpdateProf ? "profile__container-edit_update" : ""}`} type="button"
                             onClick={handleSubmit}>{props.onUpdateProf ? 'Обновлено' : changeValue ? 'Закрыть' : 'Сохранить'}</button>}
             </form>
-            <Link to="/about" className="profile__container-logout" onClick={props.onSignout}>Выйти из аккаунта</Link>
+            <Link to="/" className="profile__container-logout" onClick={props.onSignout}>Выйти из аккаунта</Link>
         </section>
     );
 }
