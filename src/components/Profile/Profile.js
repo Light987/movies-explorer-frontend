@@ -26,9 +26,9 @@ function Profile(props) {
             });
 
             props.setUpdateProf(true)
-            props.handleEditProfile()
+            props.handleEditProfile(changeValue)
         } else {
-            props.handleEditProfile()
+            props.handleEditProfile(changeValue)
             props.setUpdateProf(false)
         }
     }
@@ -41,6 +41,8 @@ function Profile(props) {
         });
 
     };
+
+    const changeValue = ((formValue.name === currentUser.name) && (formValue.email === currentUser.email))
 
     return (
         <section className="profile">
@@ -81,7 +83,7 @@ function Profile(props) {
                             }}>Редактировать </button>
                     :
                     <button className={`profile__container-edit ${props.onUpdateProf ? "profile__container-edit_update" : ""}`} type="button"
-                            onClick={handleSubmit}>{props.onUpdateProf ? 'Обновлено' : 'Сохранить'}</button>}
+                            onClick={handleSubmit}>{props.onUpdateProf ? 'Обновлено' : changeValue ? 'Закрыть' : 'Сохранить'}</button>}
             </form>
             <Link to="/about" className="profile__container-logout" onClick={props.onSignout}>Выйти из аккаунта</Link>
         </section>

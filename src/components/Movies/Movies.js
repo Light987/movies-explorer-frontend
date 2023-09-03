@@ -3,6 +3,7 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Preloader from "../Preloader/Preloader";
 
 function Movies(props) {
+    const movieSearchValue = JSON.parse(localStorage.getItem("movieSearchValue"))
 
     const moviesSlice = props.movies.slice(0, props.count);
 
@@ -10,11 +11,13 @@ function Movies(props) {
         <main className="main">
             <SearchForm handleSearchMovie={props.handleSearchMovie}
                         isShortMovies={props.isShortMovies}
+                        handleShortMovie={props.handleShortMovie}
                         setIsShortMovies={props.setIsShortMovies}
                         handleChangeChk={props.handleChangeChk}
                         isErrorInput={props.isErrorInput}
                         isSuccessInput={props.isSuccessInput}
-                        setLoading={props.setLoading}/>
+                        setLoading={props.setLoading}
+                        movieSearchValue={movieSearchValue}/>
             <MoviesCardList movies={moviesSlice}
                             handleSaveMovie={props.handleSaveMovie} handleDeleteMovie={props.handleDeleteMovie}
                             checkIsSaved={props.checkIsSaved}/>

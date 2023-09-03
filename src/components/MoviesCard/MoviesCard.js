@@ -5,6 +5,8 @@ import {useLocation} from "react-router-dom";
 
 function MoviesCard(props) {
     const {pathname} = useLocation();
+    const hour = Math.floor(props.movie.duration / 60)
+    const time = `${hour ? hour + 'ч ' : ''}${props.movie.duration % 60}м`;
 
     const isLike = props.checkIsSaved ? props.checkIsSaved(props.movie) : pathname === '/saved-movies';
 
@@ -17,12 +19,12 @@ function MoviesCard(props) {
         <>
             <div className="movies-card__head">
                 <h2 className="movies-card__head-title">{props.movie.nameRU}</h2>
-                <p className="movies-card__head-time">{props.movie.duration} минуты</p>
+                <p className="movies-card__head-time">{time}</p>
             </div>
             <a href={props.movie.trailerLink}>
                 <img
-                src={`${pathname === "/saved-movies" ? props.movie.image : "https://api.nomoreparties.co" + props.movie.image.url}`}
-                className="movies-card__img" alt={props.movie.nameRU}></img>
+                    src={`${pathname === "/saved-movies" ? props.movie.image : "https://api.nomoreparties.co" + props.movie.image.url}`}
+                    className="movies-card__img" alt={props.movie.nameRU}></img>
             </a>
             {pathname === '/movies' ? (
                 <button onClick={handleLikeClick}

@@ -16,6 +16,7 @@ import Header from "../Header/Header";
 import mainApi from "../../utils/MainApi";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import moviesApi from "../../utils/MoviesApi";
+import searchForm from "../SearchForm/SearchForm";
 
 
 function App() {
@@ -35,12 +36,30 @@ function App() {
     const [isErrorMessageInput, setIsErrorMessageInput] = useState("");
     const [isErrorStatusInput, setIsErrorStatusInput] = useState(false);
     const [maxMovies, setMaxMovies] = useState(0);
+    const [maxSavedMovies, setSavedMaxMovies] = useState(0);
     const [isSavedMovies, setIsSavedMovies] = useState(false)
     const [isShortMovies, setIsShortMovies] = useState(false);
     const [isShortSavedMovies, setIsShortSavedMovies] = useState(false);
     const [updateProf, setUpdateProf] = useState(false);
     const [loading, setLoading] = useState(false)
 
+    const movieSearchValue = JSON.parse(localStorage.getItem("movieSearchValue"))
+
+    if (movieSearchValue === null) {
+        localStorage.setItem("movieSearchValue", JSON.stringify({
+            'search': '',
+            'checkbox': false
+        }));
+    }
+
+    const savedMovieSearchValue = JSON.parse(localStorage.getItem("savedMovieSearchValue"))
+
+    if (savedMovieSearchValue === null) {
+        localStorage.setItem("savedMovieSearchValue", JSON.stringify({
+            'search': '',
+            'checkbox': false
+        }));
+    }
 
     useEffect(() => {
         const token = localStorage.getItem("jwt");
@@ -60,8 +79,9 @@ function App() {
     useEffect(() => {
 
         const movieSearchValue = JSON.parse(localStorage.getItem("movieSearchValue"));
+        const savedMovieSearchValue = JSON.parse(localStorage.getItem("savedMovieSearchValue"))
 
-        if (movieSearchValue === null) {
+        if (movieSearchValue === '') {
             setLoading(false)
         }
 
@@ -73,7 +93,7 @@ function App() {
 
                     setMoviesBF(movies)
                     setSavedMovies(savedMovies.reverse());
-                    setFilteredSavedMovies(savedMovies.reverse())
+                    // setFilteredSavedMovies(savedMovies.reverse())
                     setIsShortMovies(movieSearchValue.checkbox);
                     setLoading(false)
 
@@ -92,6 +112,26 @@ function App() {
                         setFilteredMoviesBF(filteredMovies);
                         setMaxMovies(filteredMovies.length);
                     }
+
+                    if (savedMovieSearchValue.search !== '' && !savedMovieSearchValue.checkbox) {
+                        const filteredMovies = savedMovies.reverse().filter((movie) => movie.nameRU.toLowerCase().includes(savedMovieSearchValue.search.toLowerCase()));
+                        setFilteredSavedMovies(filteredMovies);
+                        setIsShortMovies(filteredMovies)
+                        setSavedMaxMovies(filteredMovies.length);
+                    } else if (savedMovieSearchValue.checkbox && savedMovieSearchValue.search !== '') {
+                        const filteredMovies = savedMovies.reverse().filter((movie) => movie.nameRU.toLowerCase().includes(savedMovieSearchValue.search.toLowerCase()));
+                        const filteredAndCheckBox = filteredMovies.filter((movie) => movie.duration <= 40);
+                        setFilteredSavedMovies(filteredAndCheckBox);
+                        setIsShortMovies(filteredAndCheckBox)
+                        setSavedMaxMovies(filteredAndCheckBox.length);
+                    } else if (savedMovieSearchValue.checkbox) {
+                        const filteredMovies = savedMovies.reverse().filter((movie) => movie.duration <= 40);
+                        setFilteredSavedMovies(filteredMovies);
+                        setIsShortMovies(filteredMovies)
+                        setSavedMaxMovies(filteredMovies.length);
+                    }
+
+                    console.log('Тут')
                 })
                 .catch((err) => console.log(err));
         }
@@ -156,6 +196,7 @@ function App() {
         localStorage.clear();
         setMoviesBF([]);
         setMaxMovies(0);
+        setSavedMaxMovies(0)
         setSavedMovies([]);
     }
 
@@ -178,7 +219,7 @@ function App() {
             'checkbox': valueCheckbox
         }));
 
-        if (valueSearch === '' && !valueCheckbox) {
+        if (valueSearch === '') {
             errorInput("Нужно ввести ключевое слово", true);
         } else if (valueCheckbox && valueSearch === '') {
             const filteredMovies = moviesBF.filter((movie) => {
@@ -189,7 +230,6 @@ function App() {
             error("", false);
             errorInput("", false);
             setLoading(false)
-            console.log(loading)
 
             if (width >= 1280) {
                 setCount(12);
@@ -197,6 +237,10 @@ function App() {
                 setCount(8);
             } else {
                 setCount(5);
+            }
+
+            if (filteredMovies.length === 0) {
+                error("Ничего не найдено", true);
             }
         } else if ((valueSearch !== '') && valueCheckbox) {
             const filteredMovies = moviesBF.filter((movie) => {
@@ -210,7 +254,6 @@ function App() {
             error("", false);
             errorInput("", false);
             setLoading(false)
-            console.log(loading)
 
 
             if (width >= 1280) {
@@ -221,7 +264,7 @@ function App() {
                 setCount(5);
             }
 
-            if (filteredMovies.length === 0) {
+            if (filteredMoviesAndShort.length === 0) {
                 error("Ничего не найдено", true);
             }
         } else {
@@ -233,7 +276,6 @@ function App() {
             error("", false);
             errorInput("", false);
             setLoading(false)
-            console.log(loading)
 
 
             if (width >= 1280) {
@@ -250,45 +292,18 @@ function App() {
         }
     }
 
-    function handleSearchSavedMovie({valueSearch, valueCheckbox}) {
+    function handleShortMovie({valueSearch, valueCheckbox}) {
+        localStorage.setItem("movieSearchValue", JSON.stringify({
+            'search': valueSearch,
+            'checkbox': valueCheckbox
+        }));
 
-        if (valueSearch === '' && !valueCheckbox) {
-            setFilteredSavedMovies(savedMovies);
-            error("", false);
-            errorInput("", false);
-            setLoading(false)
-
-            if (width >= 1280) {
-                setCount(12);
-            } else if (width > 635 && width < 1280) {
-                setCount(8);
-            } else {
-                setCount(5);
-            }
-        } else if (valueCheckbox && valueSearch === '') {
-            const filteredMovies = savedMovies.filter((movie) => {
+        if (valueCheckbox && valueSearch !== '') {
+            const filteredMovies = filteredMoviesBF.filter((movie) => {
                 return movie.duration <= 40;
             });
-            setFilteredSavedMovies(filteredMovies);
-            error("", false);
-            errorInput("", false);
-            setLoading(false)
-
-            if (width >= 1280) {
-                setCount(12);
-            } else if (width > 635 && width < 1280) {
-                setCount(8);
-            } else {
-                setCount(5);
-            }
-        } else if ((valueSearch !== '') && valueCheckbox) {
-            const filteredMovies = savedMovies.filter((movie) => {
-                return movie.nameRU.toLowerCase().includes(valueSearch.toLowerCase());
-            });
-            const filteredMoviesAndShort = filteredMovies.filter((movie) => {
-                return movie.duration <= 40;
-            });
-            setFilteredSavedMovies(filteredMoviesAndShort);
+            setFilteredMoviesBF(filteredMovies);
+            setMaxMovies(filteredMovies.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -305,11 +320,12 @@ function App() {
             if (filteredMovies.length === 0) {
                 error("Ничего не найдено", true);
             }
-        } else {
-            const filteredMovies = savedMovies.filter((movie) => {
-                return movie.nameRU.toLowerCase().includes(valueSearch.toLowerCase());
+        } else if (valueCheckbox && valueSearch === '') {
+            const filteredMovies = filteredMoviesBF.filter((movie) => {
+                return movie.duration <= 40;
             });
-            setFilteredSavedMovies(filteredMovies);
+            setFilteredMoviesBF(filteredMovies);
+            setMaxMovies(filteredMovies.length);
             error("", false);
             errorInput("", false);
             setLoading(false)
@@ -324,6 +340,202 @@ function App() {
             }
 
             if (filteredMovies.length === 0) {
+                error("Ничего не найдено", true);
+            }
+
+        } else {
+            const filteredMovies = moviesBF.filter((movie) => {
+                return movie.nameRU.toLowerCase().includes(valueSearch.toLowerCase());
+            });
+            setFilteredMoviesBF(filteredMovies);
+            setMaxMovies(filteredMovies.length);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
+
+
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
+
+            if (filteredMovies.length === 0) {
+                error("Ничего не найдено", true);
+            }
+        }
+    }
+
+
+    function handleSearchSavedMovie({valueSearch, valueCheckbox}) {
+        localStorage.setItem("savedMovieSearchValue", JSON.stringify({
+            'search': valueSearch,
+            'checkbox': valueCheckbox
+        }));
+
+
+        if (valueSearch === '' && !valueCheckbox) {
+            setFilteredSavedMovies(savedMovies);
+            setSavedMaxMovies(savedMovies.length);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
+
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
+
+            if (savedMovies.length === 0) {
+                error("Ничего не найдено", true);
+            }
+        } else if (valueCheckbox && valueSearch === '') {
+            const filteredMovies = savedMovies.filter((movie) => {
+                return movie.duration <= 40;
+            });
+            setFilteredSavedMovies(filteredMovies);
+            setSavedMaxMovies(filteredMovies.length);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
+
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
+
+            if (filteredMovies.length === 0) {
+                error("Ничего не найдено", true);
+            }
+        } else if ((valueSearch !== '') && valueCheckbox) {
+            const filteredMovies = savedMovies.filter((movie) => {
+                return movie.nameRU.toLowerCase().includes(valueSearch.toLowerCase());
+            });
+            const filteredMoviesAndShort = filteredMovies.filter((movie) => {
+                return movie.duration <= 40;
+            });
+            setFilteredSavedMovies(filteredMoviesAndShort);
+            setSavedMaxMovies(filteredMoviesAndShort.length);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
+
+
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
+
+            if (filteredMoviesAndShort.length === 0) {
+                error("Ничего не найдено", true);
+            }
+        } else {
+            const filteredMovies = savedMovies.filter((movie) => {
+                return movie.nameRU.toLowerCase().includes(valueSearch.toLowerCase());
+            });
+            setFilteredSavedMovies(filteredMovies);
+            setSavedMaxMovies(filteredMovies.length);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
+
+
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
+
+            if (filteredMovies.length === 0) {
+                error("Ничего не найдено", true);
+            }
+        }
+    }
+
+    function handleShortSavedMovie({valueSearch, valueCheckbox}) {
+        localStorage.setItem("savedMovieSearchValue", JSON.stringify({
+            'search': valueSearch,
+            'checkbox': valueCheckbox
+        }));
+
+        if (valueCheckbox && valueSearch !== '') {
+            const filteredMovies = filteredSavedMovies.filter((movie) => {
+                return movie.duration <= 40;
+            });
+            setFilteredSavedMovies(filteredMovies);
+            setSavedMaxMovies(filteredMovies.length);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
+
+
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
+
+            if (filteredMovies.length === 0) {
+                error("Ничего не найдено", true);
+            }
+        } else if (valueCheckbox && valueSearch === '') {
+            const filteredMovies = filteredSavedMovies.filter((movie) => {
+                return movie.duration <= 40;
+            });
+            setFilteredSavedMovies(filteredMovies);
+            setSavedMaxMovies(filteredMovies.length);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
+
+
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
+
+            if (filteredMovies.length === 0) {
+                error("Ничего не найдено", true);
+            }
+
+        } else {
+            const filteredMovies = savedMovies.filter((movie) => {
+                return movie.nameRU.toLowerCase().includes(valueSearch.toLowerCase());
+            });
+            setFilteredSavedMovies(filteredMovies);
+            setSavedMaxMovies(savedMovies.length);
+            error("", false);
+            errorInput("", false);
+            setLoading(false)
+
+
+            if (width >= 1280) {
+                setCount(12);
+            } else if (width > 635 && width < 1280) {
+                setCount(8);
+            } else {
+                setCount(5);
+            }
+
+            if (savedMovies.length === 0) {
                 error("Ничего не найдено", true);
             }
         }
@@ -343,20 +555,85 @@ function App() {
         mainApi.postMovie(data)
             .then((movie) => {
                 setSavedMovies([movie, ...savedMovies]);
-                setFilteredSavedMovies([movie, ...savedMovies])
+
+                if (savedMovieSearchValue.search !== '' && !savedMovieSearchValue.checkbox) {
+                    const filteredMovies = [movie, ...savedMovies].reverse().filter((movie) => movie.nameRU.toLowerCase().includes(savedMovieSearchValue.search.toLowerCase()));
+                    setFilteredSavedMovies(filteredMovies);
+                    setIsShortMovies(filteredMovies)
+                    setSavedMaxMovies(filteredMovies.length);
+
+                    if (filteredMovies.length === 0) {
+                        error("Ничего не найдено", true);
+                    }
+                } else if (savedMovieSearchValue.checkbox && savedMovieSearchValue.search !== '') {
+                    const filteredMovies = [movie, ...savedMovies].reverse().filter((movie) => movie.nameRU.toLowerCase().includes(savedMovieSearchValue.search.toLowerCase()));
+                    const filteredAndCheckBox = filteredMovies.filter((movie) => movie.duration <= 40);
+                    setFilteredSavedMovies(filteredAndCheckBox);
+                    setIsShortMovies(filteredAndCheckBox)
+                    setSavedMaxMovies(filteredAndCheckBox.length);
+
+                    if (filteredAndCheckBox.length === 0) {
+                        error("Ничего не найдено", true);
+                    }
+                } else if (savedMovieSearchValue.checkbox) {
+                    const filteredMovies = [movie, ...savedMovies].reverse().filter((movie) => movie.duration <= 40);
+                    setFilteredSavedMovies(filteredMovies);
+                    setIsShortMovies(filteredMovies)
+                    setSavedMaxMovies(filteredMovies.length);
+
+                    if (filteredMovies.length === 0) {
+                        error("Ничего не найдено", true);
+                    }
+                } else {
+                    setFilteredSavedMovies([movie, ...savedMovies])
+                }
             })
             .catch((err) => console.log(err.message));
     }
 
     function handleDeleteMovie(movie) {
         const id = movie._id ? movie._id : savedMovies.find(savedMovie => savedMovie.movieId === movie.id)._id;
+
         mainApi.deleteMovie(id)
             .then(() => {
+
                 const newSavedMovies = savedMovies.filter((item) => item._id !== id);
                 setSavedMovies(newSavedMovies);
-                setFilteredSavedMovies(newSavedMovies)
+
+                if (savedMovieSearchValue.search !== '' && !savedMovieSearchValue.checkbox) {
+                    const filteredMovies = newSavedMovies.reverse().filter((movie) => movie.nameRU.toLowerCase().includes(savedMovieSearchValue.search.toLowerCase()));
+                    setFilteredSavedMovies(filteredMovies);
+                    setIsShortMovies(filteredMovies)
+                    setSavedMaxMovies(filteredMovies.length);
+
+                    if (filteredMovies.length === 0) {
+                        error("Ничего не найдено", true);
+                    }
+                } else if (savedMovieSearchValue.checkbox && savedMovieSearchValue.search !== '') {
+                    const filteredMovies = newSavedMovies.reverse().filter((movie) => movie.nameRU.toLowerCase().includes(savedMovieSearchValue.search.toLowerCase()));
+                    const filteredAndCheckBox = filteredMovies.filter((movie) => movie.duration <= 40);
+                    setFilteredSavedMovies(filteredAndCheckBox);
+                    setIsShortMovies(filteredAndCheckBox)
+                    setSavedMaxMovies(filteredAndCheckBox.length);
+
+                    if (filteredAndCheckBox.length === 0) {
+                        error("Ничего не найдено", true);
+                    }
+                } else if (savedMovieSearchValue.checkbox) {
+                    const filteredMovies = newSavedMovies.reverse().filter((movie) => movie.duration <= 40);
+                    setFilteredSavedMovies(filteredMovies);
+                    setIsShortMovies(filteredMovies)
+                    setSavedMaxMovies(filteredMovies.length);
+
+                    if (filteredMovies.length === 0) {
+                        error("Ничего не найдено", true);
+                    }
+                } else {
+                    setFilteredSavedMovies(newSavedMovies)
+                }
+
             })
-            .catch((err) => console.log(err.message));
+            .catch((err) => console.log(err.message))
     }
 
     function closeBurgerMenu() {
@@ -374,8 +651,12 @@ function App() {
     }
 
 
-    function handleEditProfile() {
-        setTimeout(() => setIsEditProfile(false), 2000)
+    function handleEditProfile(value) {
+        if (!value) {
+            setTimeout(() => setIsEditProfile(false), 2000)
+        } else {
+            setIsEditProfile(false)
+        }
     }
 
     const checkIsSaved = (movie) => savedMovies.some((savedMovies) => savedMovies.movieId === movie.id);
@@ -395,6 +676,7 @@ function App() {
                         movies={filteredMoviesBF}
                         isShortMovies={isShortMovies}
                         checkIsSaved={checkIsSaved}
+                        handleShortMovie={handleShortMovie}
                         handleSearchMovie={handleSearchMovie}
                         setIsShortMovies={setIsShortMovies}
                         isSavedMovies={isSavedMovies}
@@ -403,7 +685,7 @@ function App() {
                         isSuccess={isErrorStatus}
                         isErrorInput={isErrorMessageInput}
                         isSuccessInput={isErrorStatusInput}
-                        maxMovies={maxMovies}
+                        maxMovies={filteredMoviesBF.length}
                         width={width}
                         count={count}
                         setCount={setCount}
@@ -419,8 +701,9 @@ function App() {
                     element={<ProtectedRoute
                         loggedIn={loggedIn}
                         element={SavedMovies}
+                        handleShortSavedMovie={handleShortSavedMovie}
                         savedMovies={filteredSavedMovies}
-                        handleSearchMovie={handleSearchSavedMovie}
+                        handleSearchSavedMovie={handleSearchSavedMovie}
                         isShortMovies={isShortSavedMovies}
                         setIsShortMovies={setIsShortSavedMovies}
                         isSavedMovies={!checkIsSaved}

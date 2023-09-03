@@ -1,9 +1,17 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import search from "../../images/search.svg";
 
 function SearchForm(props) {
+    const [searchQuery, setSearchQuery] = useState(props.movieSearchValue.search);
+    const handleChangeChk = (e) => {
+        props.setIsShortMovies(!props.isShortMovies)
+        props.handleShortMovie({valueSearch: searchQuery, valueCheckbox: e.target.checked})
+    }
 
-    const handleChangeChk = () => props.setIsShortMovies(!props.isShortMovies)
+    const handleChange = (e) => {
+
+        setSearchQuery(e.target.value);
+    };
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -17,6 +25,8 @@ function SearchForm(props) {
                 <form autoComplete='off' onSubmit={handleSubmit}>
                     <div className="search-form__search">
                         <input type="search" name='search' className="search-form__search-input"
+                               onChange={handleChange}
+                               value={searchQuery}
                                placeholder={`${props.isSuccessInput ? props.isErrorInput : "Фильм"}`}></input>
                         <button className="search-form__search-button" type='submit'>
                             <img className="search-form__button-search search-form__button-search_img" src={search}
