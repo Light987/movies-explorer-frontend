@@ -2,8 +2,9 @@ import React from 'react'
 import './Preloader.css'
 
 function Preloader(props) {
-    // console.log(props.movies.length)
-    console.log(props.maxMovies)
+
+    console.log(props.loading)
+    console.log(!props.isSuccess)
 
     return (
         <section className="preloader">

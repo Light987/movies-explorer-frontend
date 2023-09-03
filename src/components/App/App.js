@@ -131,7 +131,6 @@ function App() {
                         setSavedMaxMovies(filteredMovies.length);
                     }
 
-                    console.log('Тут')
                 })
                 .catch((err) => console.log(err));
         }
@@ -221,6 +220,7 @@ function App() {
 
         if (valueSearch === '') {
             errorInput("Нужно ввести ключевое слово", true);
+            setLoading(false)
         } else if (valueCheckbox && valueSearch === '') {
             const filteredMovies = moviesBF.filter((movie) => {
                 return movie.duration <= 40;
