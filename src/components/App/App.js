@@ -39,8 +39,10 @@ function App() {
     const [isShortSavedMovies, setIsShortSavedMovies] = useState(false);
     const [updateProf, setUpdateProf] = useState(false);
     const [loading, setLoading] = useState(false)
+    const [isAppLoad, setIsAppLoad] = useState(false)
 
     const movieSearchValue = JSON.parse(localStorage.getItem("movieSearchValue"))
+
 
     if (movieSearchValue === null) {
         localStorage.setItem("movieSearchValue", JSON.stringify({
@@ -67,6 +69,7 @@ function App() {
                     if (res) {
                         setCurrentUser(res);
                         setLoggedIn(true);
+                        setIsAppLoad(true)
 
                     }
                 })
@@ -150,6 +153,7 @@ function App() {
             .then(() => {
                 handleLogin(regUserData)
                 error("", false);
+                setIsAppLoad(true)
             })
             .catch((err) => {
                 console.log(err);
@@ -165,6 +169,7 @@ function App() {
                 if (res.token) {
                     localStorage.setItem("jwt", res.token);
                     setLoggedIn(true);
+                    setIsAppLoad(true)
                     navigate("/movies", {replace: true});
                 }
             })
@@ -176,9 +181,12 @@ function App() {
     function handleSignOut() {
         navigate("/", {replace: true});
         setLoggedIn(false);
+        setIsAppLoad(false)
         localStorage.clear();
         setMoviesBF([]);
         setSavedMovies([]);
+        setFilteredSavedMovies([])
+        setFilteredMoviesBF([])
     }
 
     function handleUpdateUser(newUserInfo) {
@@ -657,6 +665,7 @@ function App() {
                         handleMoreMovies={handleMoreMovies}
                         loading={loading}
                         setLoading={setLoading}
+                        isAppLoad={isAppLoad}
                     />}/>
 
                 <Route
@@ -684,6 +693,7 @@ function App() {
                         handleMoreMovies={handleMoreMovies}
                         loading={loading}
                         setLoading={setLoading}
+                        isAppLoad={isAppLoad}
                     />}/>
 
                 <Route path="/profile"
@@ -696,7 +706,8 @@ function App() {
                            onUpdateUser={handleUpdateUser}
                            onSignout={handleSignOut}
                            onUpdateProf={updateProf}
-                           setUpdateProf={setUpdateProf}/>}/>
+                           setUpdateProf={setUpdateProf}
+                           isAppLoad={isAppLoad}/>}/>
 
                 <Route path="/signin" element={loggedIn ? (
                     <Navigate to="/movies" replace/>
@@ -713,7 +724,7 @@ function App() {
                        }/>
 
 
-                <Route path="/" element={<Main />}/>
+                <Route path="/" element={<Main/>}/>
 
                 <Route path="/404" element={<NotFound/>}/>
                 <Route path="*" element={<Navigate to="/404"/>}/>

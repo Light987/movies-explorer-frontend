@@ -138,11 +138,11 @@
 
 @media screen and (max-width: 990px) {
     .search-form__filter-checkbox {
-        left: 34px;
+        left: 18px;
     }
 
     .search-form__filter-checkbox:checked {
-        left: 18px;
+        left: 34px;
     }
 }
 

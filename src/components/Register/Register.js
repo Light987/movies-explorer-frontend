@@ -3,34 +3,71 @@ import {Link} from "react-router-dom";
 import logo from "../../images/logo.svg";
 
 function Register(props) {
-    const [regFormValue, setRegFormValue] = useState({
-        name: "",
-        email: "",
-        password: "",
-    });
 
-    const [isValidReg, setIsValidReg] = useState(false)
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [isValidEmail, setIsValidEmail] = useState(false);
+    const [isValidPassword, setIsValidPassword] = useState(false);
+    const [isValidName, setIsValidName] = useState(false);
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [nameError, setNameError] = useState('');
 
-    const handleChange = (evt) => {
-        const {name, value} = evt.target;
+    function handleNameChange(e) {
+        const input = e.target;
+        const validName = /^[a-zA-Zа-яА-Я- ]+$/.test(input.value);
+        setIsValidName(validName);
+        if (input.value.length < 1) {
+            setNameError("Вы пропустили это поле");
+        } else if (input.value.length < 2) {
+            setNameError("Длина имени должна быть не менее 2 символов");
+        } else if (!validName) {
+            setNameError("Имя может содержать только буквы, пробел или дефис");
+        } else {
+            setNameError("");
+        }
+        setName(input.value);
+    }
 
-        setRegFormValue({
-            ...regFormValue,
-            [name]: value,
-        });
+    function handleEmailChange(e) {
+        const input = e.target;
+        const validEmail = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i.test(
+            input.value
+        );
+        setEmail(input.value);
+        setIsValidEmail(validEmail);
+        if (!validEmail) {
+            setEmailError('Неверный формат почты')
+        } else {
+            setEmailError('');
+        }
+    }
 
-        setIsValidReg((name !== '') && (value !== ''))
-    };
+    function handlePasswordChange(e) {
+        const input = e.target;
+        setPassword(input.value);
+        setIsValidPassword(input.validity.valid);
+        if (!isValidPassword) {
+            setPasswordError(input.validationMessage)
+        } else {
+            setPasswordError('');
+        }
+    }
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        props.onRegister(regFormValue);
+        props.onRegister({
+            name: name,
+            email: email,
+            password: password,
+        });
     };
 
     return (
         <section className="register">
             <div className="register__block">
-                <Link to="/about">
+                <Link to="/">
                     <img className="register__block-logo" src={logo} alt="Обозреватель фильмов"></img>
                 </Link>
                 <h1 className="register__block-title">Добро пожаловать!</h1>
@@ -41,8 +78,8 @@ function Register(props) {
                            type="name"
                            autoComplete="off"
                            required
-                           value={regFormValue.name || ""}
-                           onChange={handleChange}
+                           value={name || ""}
+                           onChange={handleNameChange}
                            minLength="2"
                            maxLength="30"
                            placeholder='Введите имя'></input>
@@ -52,8 +89,8 @@ function Register(props) {
                            type="email"
                            autoComplete="off"
                            required
-                           value={regFormValue.email || ""}
-                           onChange={handleChange}
+                           value={email || ""}
+                           onChange={handleEmailChange}
                            placeholder='Введите email'/>
                     <p className="register__block-text">Пароль</p>
                     <input className={`register__block-input ${props.isSuccess ? "register__block-input_error" : ""}`}
@@ -61,12 +98,15 @@ function Register(props) {
                            type="password"
                            autoComplete="off"
                            required
-                           value={regFormValue.password || ""}
-                           onChange={handleChange}
+                           value={password || ""}
+                           onChange={handlePasswordChange}
                            placeholder='Введите пароль'/>
                     <span
                         className={`register__block-error ${props.isSuccess ? "register__block-error_open" : ""}`}>{props.isError}</span>
-                    <button className={`register__block-button ${isValidReg ? '' : "register__block-button_disable"}`} type="submit" disabled={!isValidReg}>Зарегистрироваться</button>
+                    <button
+                        className={`register__block-button ${(isValidEmail && isValidPassword && isValidName) ? '' : "register__block-button_disable"}`}
+                        type="submit" disabled={!(isValidEmail && isValidPassword && isValidName)}>Зарегистрироваться
+                    </button>
                 </form>
                 <div className="register__registration-block">
                     <p className="register__block-registration-q">Уже зарегистрированы?</p>

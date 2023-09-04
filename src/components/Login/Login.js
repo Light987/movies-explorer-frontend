@@ -6,35 +6,54 @@ import {Link, useLocation} from "react-router-dom";
 function Login(props) {
     const {pathname} = useLocation();
 
-    const [formValue, setFormValue] = useState({
-        email: "",
-        password: "",
-    });
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isValidEmail, setIsValidEmail] = useState(false);
+    const [isValidPassword, setIsValidPassword] = useState(false);
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
 
-    const [isValidLogin, setIsValidLogin] = useState(false)
+    function handleEmailChange(e) {
+        const input = e.target;
+        setEmail(input.value);
+        const validEmail = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i.test(
+            input.value
+        );
+        console.log(input.value)
+        console.log(email)
+        console.log(validEmail)
+        setIsValidEmail(validEmail);
+        if (!validEmail) {
+            setEmailError('Неверный формат почты')
+        } else {
+            setEmailError('');
+        }
+    }
 
-    const handleChange = (evt) => {
-        const {name, value} = evt.target;
-        setFormValue({
-            ...formValue,
-            [name]: value,
-        });
-
-        setIsValidLogin((name !== '') && (value !== ''))
-
-    };
+    function handlePasswordChange(e) {
+        const input = e.target;
+        setPassword(input.value);
+        setIsValidPassword(input.validity.valid);
+        if (!isValidPassword) {
+            setPasswordError(input.validationMessage)
+        } else {
+            setPasswordError('');
+        }
+    }
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        props.onLogin(formValue);
+        props.onLogin({
+            email: email,
+            password: password,
+        });
     };
-
 
 
     return (
         <section className="login">
             <div className="login__block">
-                <Link to="/about">
+                <Link to="/">
                     <img className="login__block-logo" src={logo} alt="Обозреватель фильмов"></img>
                 </Link>
                 <h1 className="login__block-title">Рады видеть!</h1>
@@ -45,8 +64,8 @@ function Login(props) {
                            type="email"
                            autoComplete="off"
                            required
-                           value={formValue.email || ""}
-                           onChange={handleChange}
+                           value={email || ""}
+                           onChange={handleEmailChange}
                            placeholder='Введите email'/>
                     <p className="login__block-email">Пароль</p>
                     <input className="login__block-input"
@@ -54,10 +73,12 @@ function Login(props) {
                            type="password"
                            autoComplete="off"
                            required
-                           value={formValue.password || ""}
-                           onChange={handleChange}
+                           value={password || ""}
+                           onChange={handlePasswordChange}
                            placeholder='Введите пароль'/>
-                    <button className={`login__block-button ${isValidLogin ? '' : "login__block-button_disable"}`} type="submit" disabled={!isValidLogin}>Войти</button>
+                    <button className={`login__block-button ${(isValidPassword && isValidEmail) ? '' : "login__block-button_disable"}`}
+                            type="submit" disabled={!isValidPassword}>Войти
+                    </button>
                 </form>
                 <div className="login__registration-block">
                     <p className="login__block-registration-q">Ещё не зарегистрированы?</p>
