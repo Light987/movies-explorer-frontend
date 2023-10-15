@@ -83,6 +83,8 @@ function Register(props) {
                            minLength="2"
                            maxLength="30"
                            placeholder='Введите имя'></input>
+                    <span
+                        className={`register__block-error ${nameError ? "register__block-error_open" : ""}`}>{nameError}</span>
                     <p className="register__block-text">E-mail</p>
                     <input className="register__block-input"
                            name="email"
@@ -92,6 +94,8 @@ function Register(props) {
                            value={email || ""}
                            onChange={handleEmailChange}
                            placeholder='Введите email'/>
+                    <span
+                        className={`register__block-error ${emailError ? "register__block-error_open" : ""}`}>{emailError}</span>
                     <p className="register__block-text">Пароль</p>
                     <input className={`register__block-input ${props.isSuccess ? "register__block-input_error" : ""}`}
                            name="password"
@@ -102,7 +106,7 @@ function Register(props) {
                            onChange={handlePasswordChange}
                            placeholder='Введите пароль'/>
                     <span
-                        className={`register__block-error ${props.isSuccess ? "register__block-error_open" : ""}`}>{props.isError}</span>
+                        className={`register__block-error ${passwordError ? "register__block-error_open" : ""}`}>{passwordError}</span>
                     <button
                         className={`register__block-button ${(isValidEmail && isValidPassword && isValidName) ? '' : "register__block-button_disable"}`}
                         type="submit" disabled={!(isValidEmail && isValidPassword && isValidName)}>Зарегистрироваться

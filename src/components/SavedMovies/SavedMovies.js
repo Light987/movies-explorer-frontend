@@ -3,9 +3,10 @@ import SearchForm from "../SearchForm/SearchForm";
 import Preloader from "../Preloader/Preloader";
 
 function SavedMovies(props) {
-    const savedMovieSearchValue = JSON.parse(localStorage.getItem("savedMovieSearchValue"))
+    const savedMovieSearchValue = {
+        'search': null
+    }
 
-    const savedMoviesSlice = props.savedMovies.slice(0, props.count);
 
     return (
         <main className="main">
@@ -18,10 +19,14 @@ function SavedMovies(props) {
                         isSuccessInput={props.isSuccessInput}
                         setLoading={props.setLoading}
                         movieSearchValue={savedMovieSearchValue}/>
-            <MoviesCardList movies={savedMoviesSlice} isSavedMovies={props.isSavedMovies}
-                            handleSaveMovie={props.handleSaveMovie} handleDeleteMovie={props.handleDeleteMovie}/>
-            <Preloader movies={savedMoviesSlice} isError={props.isError} isSuccess={props.isSuccess}
-                       handleMoreMovies={props.handleMoreMovies} maxMovies={props.maxSavedMovies}
+            <MoviesCardList movies={props.savedMovies}
+                            isSavedMovies={props.isSavedMovies}
+                            handleSaveMovie={props.handleSaveMovie}
+                            handleDeleteMovie={props.handleDeleteMovie}/>
+            <Preloader movies={props.savedMovies} isError={props.isError}
+                       isSuccess={props.isSuccess}
+                       handleMoreMovies={props.handleMoreMovies}
+                       maxMovies={props.maxSavedMovies}
                        loading={props.loading}/>
         </main>
     )

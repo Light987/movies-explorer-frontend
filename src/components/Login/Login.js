@@ -19,9 +19,6 @@ function Login(props) {
         const validEmail = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i.test(
             input.value
         );
-        console.log(input.value)
-        console.log(email)
-        console.log(validEmail)
         setIsValidEmail(validEmail);
         if (!validEmail) {
             setEmailError('Неверный формат почты')
@@ -49,12 +46,15 @@ function Login(props) {
         });
     };
 
+    console.log(passwordError)
+
 
     return (
         <section className="login">
             <div className="login__block">
                 <Link to="/">
-                    <img className="login__block-logo" src={logo} alt="Обозреватель фильмов"></img>
+                    <img className="login__block-logo" src={logo}
+                         alt="Обозреватель фильмов"></img>
                 </Link>
                 <h1 className="login__block-title">Рады видеть!</h1>
                 <form onSubmit={handleSubmit}>
@@ -67,6 +67,8 @@ function Login(props) {
                            value={email || ""}
                            onChange={handleEmailChange}
                            placeholder='Введите email'/>
+                    <span
+                        className={`login__block-error ${emailError ? "login__block-error_open" : ""}`}>{emailError}</span>
                     <p className="login__block-email">Пароль</p>
                     <input className="login__block-input"
                            name="password"
@@ -76,14 +78,19 @@ function Login(props) {
                            value={password || ""}
                            onChange={handlePasswordChange}
                            placeholder='Введите пароль'/>
-                    <button className={`login__block-button ${(isValidPassword && isValidEmail) ? '' : "login__block-button_disable"}`}
-                            type="submit" disabled={!isValidPassword}>Войти
+                    <span
+                        className={`login__block-error ${passwordError ? "login__block-error_open" : ""}`}>{passwordError}</span>
+                    <button
+                        className={`login__block-button ${(isValidPassword && isValidEmail) ? '' : "login__block-button_disable"}`}
+                        type="submit" disabled={!isValidPassword}>Войти
                     </button>
                 </form>
                 <div className="login__registration-block">
-                    <p className="login__block-registration-q">Ещё не зарегистрированы?</p>
+                    <p className="login__block-registration-q">Ещё не
+                        зарегистрированы?</p>
                     {pathname === "/signin" && (
-                        <Link to="/signup" className="login__block-registration login__block-registration_link">
+                        <Link to="/signup"
+                              className="login__block-registration login__block-registration_link">
                             Регистрация
                         </Link>
                     )}
