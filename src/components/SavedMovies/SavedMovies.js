@@ -1,28 +1,43 @@
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
-import movies from "../../utils/movies";
 import SearchForm from "../SearchForm/SearchForm";
 import Preloader from "../Preloader/Preloader";
+import {useEffect} from "react";
 
 function SavedMovies(props) {
-    function savedMovies(movies) {
-        if (movies) {
-            return movies.filter((savedMovie) => savedMovie.isLiked);
-        } else {
-            return [];
-        }
+    const savedMovieSearchValue = {
+        'search': null
     }
 
-    console.log(savedMovies(movies) ? savedMovies(movies).length : 0)
-    console.log(savedMovies(props.moviesToRender) ? savedMovies(props.moviesToRender).length : 0)
+    useEffect(() => {
+        props.setLoading(true)
+        props.handleSearchSavedMovie({
+            valueSearch: '',
+            valueCheckbox: false
+        });
+        props.setIsShortMovies(false)
+    }, []);
+
 
     return (
         <main className="main">
-            <SearchForm handleSubmit={props.handleSubmit}/>
-            <MoviesCardList movies={savedMovies(props.moviesToRender)} onMovieLike={props.movieLike}
-                            movieQuery={props.movieQuery}/>
-            <Preloader maxMovies={savedMovies(movies) ? savedMovies(movies).length : 0}
-                       moviesLen={savedMovies(props.moviesToRender) ? savedMovies(props.moviesToRender).length : 0}
-                       morePosts={savedMovies(props.showMoreMovies)}/>
+            <SearchForm handleSearchMovie={props.handleSearchSavedMovie}
+                        isShortMovies={props.isShortMovies}
+                        setIsShortMovies={props.setIsShortMovies}
+                        handleShortMovie={props.handleShortSavedMovie}
+                        handleChangeChk={props.handleChangeChk}
+                        isErrorInput={props.isErrorInput}
+                        isSuccessInput={props.isSuccessInput}
+                        setLoading={props.setLoading}
+                        movieSearchValue={savedMovieSearchValue}/>
+            <MoviesCardList movies={props.savedMovies}
+                            isSavedMovies={props.isSavedMovies}
+                            handleSaveMovie={props.handleSaveMovie}
+                            handleDeleteMovie={props.handleDeleteMovie}/>
+            <Preloader movies={props.savedMovies} isError={props.isError}
+                       isSuccess={props.isSuccess}
+                       handleMoreMovies={props.handleMoreMovies}
+                       maxMovies={props.maxSavedMovies}
+                       loading={props.loading}/>
         </main>
     )
 }

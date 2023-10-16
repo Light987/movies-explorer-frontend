@@ -9,7 +9,7 @@ function Header(props) {
 
     return (
         <>
-            {pathname === "/about" && (
+            {((!props.loggedIn) && (pathname !== "/signin") && (pathname !== "/signup")) && (
                 <header className="header">
                     <nav className="header__nav">
                         <ul className="header__profile">
@@ -34,13 +34,13 @@ function Header(props) {
                 </header>
             )}
 
-            {(pathname === "/movies" || pathname === "/saved-movies" || pathname === "/profile") && (
-                <header className="header header_movies">
+            {(props.loggedIn) && (
+                <header className={`header ${(pathname !== "/") ? "header_movies" : "header_logged"}`}>
 
                     {props.width > 990 ?
 
                         <nav className="header__nav">
-                            <ul className="header__profile header__profile_movies">
+                            <ul className={`header__profile ${pathname !== "/" ? "header__profile_movies" : "header_logged"}`}>
                                 <li className="header__profile-list-item">
                                     <Link to="/">
                                         <img className="header__logo" src={logo} alt="Обозреватель фильмов"/>

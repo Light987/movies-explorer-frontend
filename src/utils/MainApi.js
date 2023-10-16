@@ -1,6 +1,6 @@
 import {configApi} from './Constants';
 
-class Api {
+class MainApi {
     constructor(options) {
         this._url = options.url;
         this._headers = options.headers;
@@ -39,7 +39,7 @@ class Api {
             .then(this._checkResponse)
     }
 
-    getAllCards() {
+    getSavedMovies() {
         return fetch(`${this._url}/movies`, {
             headers: {
                 "Content-Type": "application/json",
@@ -49,23 +49,32 @@ class Api {
             .then(this._checkResponse)
     }
 
-    postCard({name, link}) {
-        return fetch(`${this._url}/cards`, {
+    postMovie(movie) {
+        return fetch(`${this._url}/movies`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
                 authorization: `Bearer ${localStorage.getItem("jwt")}`,
             },
             body: JSON.stringify({
-                name: name,
-                link: link
-            })
+                country: `${movie.country}`,
+                director: `${movie.director}`,
+                duration: `${movie.duration}`,
+                year: `${movie.year}`,
+                description: `${movie.description}`,
+                image: `https://api.nomoreparties.co${movie.image.url}`,
+                trailerLink: `${movie.trailerLink}`,
+                thumbnail: `https://api.nomoreparties.co${movie.image.url}`,
+                movieId: `${movie.id}`,
+                nameRU: `${movie.nameRU}`,
+                nameEN: `${movie.nameEN}`
+            }),
         })
             .then(this._checkResponse)
     }
 
-    deleteCard(id) {
-        return fetch(`${this._url}/cards/${id}`, {
+    deleteMovie(id) {
+        return fetch(`${this._url}/movies/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -89,6 +98,6 @@ class Api {
 }
 
 
-const api = new Api(configApi);
+const mainApi = new MainApi(configApi);
 
-export default api
+export default mainApi

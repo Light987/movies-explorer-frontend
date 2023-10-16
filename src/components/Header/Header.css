@@ -99,6 +99,11 @@
     }
 }
 
+.header_logged {
+    grid-column-gap: 16px;
+    background-color: #073042;
+}
+
 
 .header_movies {
     background-color: #202020;

@@ -1,5 +1,6 @@
 import React from "react";
 import landing_logo from "../../../images/landing-logo.svg";
+import {Link} from "react-router-dom";
 
 function Promo() {
     return (
@@ -9,7 +10,7 @@ function Promo() {
                     <h1 className="promo-title">Учебный проект студента факультета Веб&#8209;разработки.</h1>
                     <p className="promo-subtitle">Листайте ниже, чтобы узнать больше про этот проект и его
                         создателя.</p>
-                    <a href="/movies" className="promo-link">Узнать больше</a>
+                    <Link to="/movies" className="promo-link">Узнать больше</Link>
                 </div>
                 <img className="promo-logo" src={landing_logo} alt="Web"></img>
             </div>
