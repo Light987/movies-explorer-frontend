@@ -1,11 +1,21 @@
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
 import Preloader from "../Preloader/Preloader";
+import {useEffect} from "react";
 
 function SavedMovies(props) {
     const savedMovieSearchValue = {
         'search': null
     }
+
+    useEffect(() => {
+        props.setLoading(true)
+        props.handleSearchSavedMovie({
+            valueSearch: '',
+            valueCheckbox: false
+        });
+        props.setIsShortMovies(false)
+    }, []);
 
 
     return (

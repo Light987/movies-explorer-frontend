@@ -139,7 +139,6 @@ function App() {
     }
 
     function handleLogin(userData) {
-
         auth
             .login(userData)
             .then((res) => {

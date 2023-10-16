@@ -46,9 +46,6 @@ function Login(props) {
         });
     };
 
-    console.log(passwordError)
-
-
     return (
         <section className="login">
             <div className="login__block">
@@ -82,7 +79,7 @@ function Login(props) {
                         className={`login__block-error ${passwordError ? "login__block-error_open" : ""}`}>{passwordError}</span>
                     <button
                         className={`login__block-button ${(isValidPassword && isValidEmail) ? '' : "login__block-button_disable"}`}
-                        type="submit" disabled={!isValidPassword}>Войти
+                        type="submit" disabled={!(isValidEmail && isValidPassword)}>Войти
                     </button>
                 </form>
                 <div className="login__registration-block">
